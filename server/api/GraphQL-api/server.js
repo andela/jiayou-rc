@@ -7,7 +7,9 @@ const app = express();
 const PORT = 8000;
 
 // Get products
-
+// app.get("/api/products", (req, res) => {
+//   axios.get(`http://${req.headers.host}/graphql`, )
+// });
 
 app.use("/graphql", GraphQLHTTP({
   schema,
