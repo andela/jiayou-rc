@@ -16,7 +16,16 @@ app.use("/graphql", GraphQLHTTP({
 app.get("/api/products", (request, response) => {
   axios.post(`http://${request.headers.host}/graphql`,
     {
-      query: "{products {title _id vendor price inventoryQuantity}}"},
+      query: `{
+        products {
+          title
+          _id
+          vendor
+          price
+          inventoryQuantity
+        }
+      }`
+    },
     {
       headers: {
         "Content-Type": "application/json"
@@ -30,10 +39,19 @@ app.get("/api/products", (request, response) => {
       });
 });
 
+// Get shops
 app.get("/api/shops", (request, response) => {
   axios.post(`http://${request.headers.host}/graphql`,
     {
-      query: "{shops {name _id description email status}}"
+      query: `{
+        shops {
+          name
+          _id
+          description
+          email
+          status
+        }
+      }`
     },
     {
       headers: {
