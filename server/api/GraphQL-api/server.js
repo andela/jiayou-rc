@@ -48,7 +48,6 @@ app.get("/api/shops", (request, response) => {
           name
           _id
           description
-          email
           status
         }
       }`
