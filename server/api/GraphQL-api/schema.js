@@ -4,10 +4,10 @@ import {
   GraphQLList
 } from "graphql";
 
-import ProductsType from "./schemas";
-import OrdersType from "./schemas";
-import UsersType from "./schemas";
-import ShopsType from "./schemas";
+import ProductsType from "./schemas/products.schema";
+import OrdersType from "./schemas/orders";
+import UsersType from "./schemas/users";
+import ShopsType from "./schemas/shops.schema";
 import { Products, Shops, Accounts, Orders } from "/lib/collections";
 
 // define query object
