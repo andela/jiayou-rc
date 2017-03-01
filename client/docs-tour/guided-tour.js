@@ -9,50 +9,51 @@ const tour = new Tour({
       use this application as a seller.`
     },
     {
-      element: "",
+      element: ".fa-th",
       title: "Settings",
       content: `Reaction configuration; Here you configure your
       shop’s name, address, payment methods, and other settings. `
     },
     {
-      element: "",
+      element: ".fa-sun-o",
+      title: "Orders",
+      content: "Review and process orders."
+    },
+    {
+      element: ".fa-truck",
+      title: "Shipping",
+      content: "Set up and manage your shipping and handling rates."
+    },
+    {
+      element: ".fa-sign-in",
       title: "Accounts",
       content: `Add, edit, and remove permissions for
       each of your shop members.`
     },
     {
-      element: "",
+      element: ".fa-envelope-o",
       title: "Email",
       content: "Configure the email type you want to be connected to your store"
     },
     {
-      element: "",
-      title: "Orders",
-      content: "Review and process orders."
-    },
-    {
-      element: "",
-      title: "Shipping",
-      content: "Set up and manage your shipping and handling rates."
-    },
-    {
-      element: "",
-      title: "Catalog",
-      content: "Enable or disable your product catalog view."
-    },
-    {
-      element: "",
-      title: "Search",
-      content: "Configure your store’s search settings."
-    },
-    {
-      element: "",
+      element: ".fa-undo",
       title: "Revisions",
       content: `Here the ability for admin users to review, stage,
       and revert changes to products.`
     },
     {
-      element: "",
+      element: ".fa-archive",
+      title: "Catalog",
+      content: "Enable or disable your product catalog view."
+    },
+    {
+      element: ".fa-search",
+      title: "Search",
+      content: "Configure your store’s search settings."
+    },
+
+    {
+      element: ".fa-university",
       title: "Taxes",
       content: "Enable Custom taxes, Avalara, and TaxCloud taxes"
     }
