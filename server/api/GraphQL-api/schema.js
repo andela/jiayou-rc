@@ -56,7 +56,8 @@ const query = new GraphQLObjectType({
 });
 
 const schema = new GraphQLSchema({
-  query
+  query: query,
+  mutation: UserMutation
 });
 
 export default schema;
