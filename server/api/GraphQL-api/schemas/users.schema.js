@@ -2,7 +2,8 @@ import {
   GraphQLObjectType,
   GraphQLString,
   GraphQLID,
-  GraphQLBoolean
+  GraphQLBoolean,
+  GraphQLList
 } from "graphql";
 
 import GraphQLDate from "graphql-date";
@@ -11,24 +12,6 @@ const UserAddress = new GraphQLObjectType({
   name: "UserAddress",
   description: "Describes address of a user",
   fields: () => ({
-    emails: {
-      type: GraphQLString,
-      resolve: (data) => {
-        if (data.emails) {
-          return data.emails[0].address;
-        }
-        return "No available email for user";
-      }
-    },
-    verified: {
-      type: GraphQLBoolean,
-      resolve: (data) => {
-        if (data.emails) {
-          return data.emails[0].verified;
-        }
-        return null;
-      }
-    },
     country: {
       type: GraphQLString,
       resolve: (data) => {
@@ -60,6 +43,40 @@ const UserAddress = new GraphQLObjectType({
   })
 });
 
+const Email = new GraphQLObjectType({
+  name: "Email",
+  description: "Get email details for a user",
+  fields: () => ({
+    address: {
+      type: GraphQLString,
+      resolve: (data) => {
+        if (data) {
+          return data.address;
+        }
+        return "No email for user";
+      }
+    },
+    verified: {
+      type: GraphQLBoolean,
+      resolve: (data) => {
+        if (data) {
+          return data.verified;
+        }
+        return "Unable to verify email";
+      }
+    },
+    provides: {
+      type: GraphQLString,
+      resolve: (data) => {
+        if (data) {
+          return data.provides;
+        }
+        return "Unable to get provider";
+      }
+    }
+  })
+});
+
 
 // Define UsersType
 const UsersType = new GraphQLObjectType({
@@ -70,6 +87,15 @@ const UsersType = new GraphQLObjectType({
     createdAt: { type: GraphQLDate },
     userId: { type: GraphQLString },
     shopId: { type: GraphQLString },
+    emails: {
+      type: new GraphQLList(Email),
+      resolve: (data) => {
+        if (data) {
+          return data.emails;
+        }
+        return "No emails details for user";
+      }
+    },
     addressBook: {
       type: UserAddress,
       resolve: (data) => {
