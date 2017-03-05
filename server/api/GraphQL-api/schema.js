@@ -4,10 +4,12 @@ import {
   GraphQLList
 } from "graphql";
 
+const maskErrors = require("graphql-errors").maskErrors;
 import ProductsType from "./schemas/products.schema";
-import OrdersType from "./schemas/orders";
-import UsersType from "./schemas/users";
+import OrdersType from "./schemas/orders.schema";
+import UsersType from "./schemas/users.schema";
 import ShopsType from "./schemas/shops.schema";
+import UserMutation from "./mutations/users.mutations";
 import { Products, Shops, Accounts, Orders } from "/lib/collections";
 
 // define query object
@@ -54,6 +56,8 @@ const query = new GraphQLObjectType({
     }
   })
 });
+
+maskErrors(UserMutation);
 
 const schema = new GraphQLSchema({
   query: query,
