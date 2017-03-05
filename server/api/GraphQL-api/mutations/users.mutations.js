@@ -1,43 +1,44 @@
 import {
   GraphQLString,
-  GraphQLNonNull,
   GraphQLObjectType,
   GraphQLInputObjectType,
-  GraphQLBoolean
+  GraphQLBoolean,
+  GraphQLList
 } from "graphql";
 
-import GraphQLDate from "graphql-date";
-
 import UserType from "../schemas/users.schema";
-// import { Accounts } from "/lib/collections";
 import * as Collections from "/lib/collections";
 
-const UserInputType = new GraphQLInputObjectType({
-  name: "UserInput",
+const EmailInput = new GraphQLInputObjectType({
+  name: "EmailInput",
   fields: () => ({
-    createdAt: { type: GraphQLDate },
-    userId: { type: GraphQLString },
-    shopId: { type: GraphQLString },
-    emails: { type: GraphQLString },
-    verified: { type: GraphQLBoolean },
-    fullName: { type: GraphQLString },
-    phone: { type: GraphQLString },
-    address1: { type: GraphQLString }
+    provides: { type: GraphQLString },
+    address: { type: GraphQLString },
+    verified: { type: GraphQLBoolean }
+  })
+});
+
+const UserEmail = new GraphQLInputObjectType({
+  name: "UserEmail",
+  description: "Describes the address of a user",
+  fields: () => ({
+    data: { type: EmailInput }
   })
 });
 
 const UserMutation = new GraphQLObjectType({
   name: "UserMutation",
-  description: "Updates the details of a user",
   fields: () => ({
-    createUser: {
+    addUser: {
       type: UserType,
-      description: "Creates new user",
       args: {
-        user: { type: UserInputType }
+        userId: { type: GraphQLString },
+        shopId: { type: GraphQLString },
+        emails: { type: UserEmail }
       },
-      resolve: (root, { user }) => {
-        Collections.Accounts.insert({ user });
+      resolve(root, args) {
+        return Collections.Accounts.insert({userId: args.userId, shopId: args.shopId, emails: args.emails});
+        // return args;
       }
     }
   })
