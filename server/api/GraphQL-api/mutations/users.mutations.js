@@ -6,23 +6,16 @@ import {
   GraphQLList
 } from "graphql";
 
-import UserType from "../schemas/users.schema";
-import * as Collections from "/lib/collections";
+import  UsersType from "../schemas/users.schema";
+import { Accounts } from "/lib/collections";
 
-const EmailInput = new GraphQLInputObjectType({
-  name: "EmailInput",
-  fields: () => ({
-    provides: { type: GraphQLString },
-    address: { type: GraphQLString },
-    verified: { type: GraphQLBoolean }
-  })
-});
-
-const UserEmail = new GraphQLInputObjectType({
+const Email = new GraphQLInputObjectType({
   name: "UserEmail",
-  description: "Describes the address of a user",
+  description: "Describes the email details of a user",
   fields: () => ({
-    data: { type: EmailInput }
+    address: { type: GraphQLString },
+    verified: { type: GraphQLBoolean },
+    provides: { type: GraphQLString }
   })
 });
 
@@ -30,15 +23,19 @@ const UserMutation = new GraphQLObjectType({
   name: "UserMutation",
   fields: () => ({
     addUser: {
-      type: UserType,
+      type: UsersType,
       args: {
         userId: { type: GraphQLString },
         shopId: { type: GraphQLString },
-        emails: { type: UserEmail }
+        emails: { type: new GraphQLList(Email) }
       },
       resolve(root, args) {
-        return Collections.Accounts.insert({userId: args.userId, shopId: args.shopId, emails: args.emails});
-        // return args;
+        // console.log(args.emails);
+        console.log(args.emails[0].address, args.emails[0].verified, args.emails[0].provides);
+        return Accounts.insert({
+          userId: args.userId, shopId: args.shopId, emails: [{
+            address: args.emails[0].address, verified: args.emails[0].verified, provides: args.emails[0].provides}]
+        });
       }
     }
   })
