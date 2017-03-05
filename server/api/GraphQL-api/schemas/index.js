@@ -1,4 +1,4 @@
-export * from "./orders.js";
+export * from "./orders.schema.js";
 export * from "./products.schema.js";
 export * from "./shops.schema.js";
-export * from "./users.js";
+export * from "./users.schema.js";

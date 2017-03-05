@@ -14,7 +14,7 @@ const UserAddress = new GraphQLObjectType({
     emails: {
       type: GraphQLString,
       resolve: (data) => {
-        if (data.emails.length) {
+        if (data.emails) {
           return data.emails[0].address;
         }
         return "No available email for user";
@@ -23,7 +23,7 @@ const UserAddress = new GraphQLObjectType({
     verified: {
       type: GraphQLBoolean,
       resolve: (data) => {
-        if (data.emails.length) {
+        if (data.emails) {
           return data.emails[0].verified;
         }
         return null;
