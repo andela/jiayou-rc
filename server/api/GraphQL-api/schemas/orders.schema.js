@@ -3,7 +3,6 @@ import {
   GraphQLInt,
   GraphQLString,
   GraphQLList,
-  GraphQLID,
   GraphQLBoolean,
   GraphQLFloat
 } from "graphql";
@@ -42,9 +41,9 @@ const OrdersType = new GraphQLObjectType({
   name: "Orders",
   description: "Returns specified orders",
   fields: () => ({
-    _id: { type: GraphQLID },
-    userId: { type: GraphQLID },
-    shopId: { type: GraphQLID },
+    _id: { type: GraphQLString },
+    userId: { type: GraphQLString },
+    shopId: { type: GraphQLString },
     status: {
       type: GraphQLString,
       resolve: (data) => {

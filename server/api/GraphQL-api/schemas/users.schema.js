@@ -8,38 +8,100 @@ import {
 
 import GraphQLDate from "graphql-date";
 
-const UserAddress = new GraphQLObjectType({
-  name: "UserAddress",
-  description: "Describes address of a user",
+const UserProfile = new GraphQLObjectType({
+  name: "Profile",
+  description: "Get address details for user",
   fields: () => ({
     country: {
       type: GraphQLString,
       resolve: (data) => {
-        if (data.profile.addressBook) {
-          return data.profile.addressBook[0].country;
+        if (data.addressBook) {
+          return data.addressBook[0].country;
         }
-        return "No available country for user";
+        return "A user has no country";
       }
     },
     fullName: {
       type: GraphQLString,
       resolve: (data) => {
-        if (data.profile.addressBook) {
-          return data.profile.addressBook[0].fullName;
+        if (data.addressBook) {
+          return data.addressBook[0].fullName;
         }
-        return "No available name for user";
+        return "A user has no name";
+      }
+    },
+    address1: {
+      type: GraphQLString,
+      resolve: (data) => {
+        if (data.addressBook) {
+          return data.addressBook[0].address1;
+        }
+        return "A user has no address";
+      }
+    },
+    city: {
+      type: GraphQLString,
+      resolve: (data) => {
+        if (data.addressBook) {
+          return data.addressBook[0].city;
+        }
+        return "A user has no city";
+      }
+    },
+    region: {
+      type: GraphQLString,
+      resolve: (data) => {
+        if (data.addressBook) {
+          return data.addressBook[0].region;
+        }
+        return "A user has no region";
       }
     },
     phone: {
       type: GraphQLString,
       resolve: (data) => {
-        if (data.profile.addressBook) {
-          return data.profile.addressBook[0].phone;
+        if (data.addressBook) {
+          return data.addressBook[0].phone;
         }
-        return "No phone number for user";
+        return "A user has no phone number";
       }
     },
-    address1: { type: GraphQLString }
+    postal: {
+      type: GraphQLString,
+      resolve: (data) => {
+        if (data.addressBook) {
+          return data.addressBook[0].postal;
+        }
+        return "A user has no postal code";
+      }
+    },
+    isShippingDefault: {
+      type: GraphQLBoolean,
+      resolve: (data) => {
+        if (data.addressBook) {
+          return data.addressBook[0].isShippingDefault;
+        }
+        return "Unknown";
+      }
+    },
+    isBillingDefault: {
+      type: GraphQLBoolean,
+      resolve: (data) => {
+        if (data.addressBook) {
+          return data.addressBook[0].isBillingDefault;
+        }
+        return "Unknown";
+      }
+    },
+    isCommercial: {
+      type: GraphQLBoolean,
+      resolve: (data) => {
+        if (data.addressBook) {
+          return data.addressBook[0].isCommercial;
+        }
+        return "Unknown";
+      }
+    }
   })
 });
 
@@ -93,16 +155,16 @@ const UsersType = new GraphQLObjectType({
         if (data) {
           return data.emails;
         }
-        return "No emails details for user";
+        return "A user has no email";
       }
     },
-    addressBook: {
-      type: UserAddress,
+    profile: {
+      type: UserProfile,
       resolve: (data) => {
-        if (data.profile.addressBook) {
-          return data.addressBook[0];
+        if (!data.profile) {
+          return "A user has no address";
         }
-        return "No available address for user";
+        return data.profile;
       }
     }
   })
