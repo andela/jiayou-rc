@@ -54,18 +54,6 @@ Template.loginFormSignUpView.events({
       shopName = template.$(".shop-name").val().trim();
       shopPhone = template.$(".shop-phone").val().trim();
       shopAddress = template.$(".shop-address").val().trim();
-      // const validatedShopName = LoginFormValidation.shopName(shopName);
-      // const validatedShopPhone = LoginFormValidation.shopPhone(shopPhone);
-      // const validatedShopAddress = LoginFormValidation.shopAddress(shopAddress);
-      // if (validatedShopName !== true) {
-      //   errors.shopName = validatedShopName;
-      // }
-      // if (validatedShopPhone !== true) {
-      //   errors.shopPhone = validatedShopPhone;
-      // }
-      // if (validatedShopAddress !== true) {
-      //   errors.shopAddress = validatedShopAddress;
-      // }
       vendorDetails = { vendorDetails: [{
         shopName: shopName,
         shopPhone: shopPhone,
