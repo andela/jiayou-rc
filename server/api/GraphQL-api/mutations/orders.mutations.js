@@ -26,7 +26,6 @@ const OrderMutation = new GraphQLObjectType({
         sessionId: { type: GraphQLString }
       },
       resolve(root, args) {
-        console.log(args);
         Orders.insert({
           userId: args.userId,
           shopId: args.shopId,
