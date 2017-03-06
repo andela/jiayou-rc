@@ -1,7 +1,8 @@
 import {
   GraphQLObjectType,
   GraphQLSchema,
-  GraphQLList
+  GraphQLList,
+  GraphQLString
 } from "graphql";
 
 const maskErrors = require("graphql-errors").maskErrors;
@@ -10,6 +11,7 @@ import OrdersType from "./schemas/orders.schema";
 import UsersType from "./schemas/users.schema";
 import ShopsType from "./schemas/shops.schema";
 import UserMutation from "./mutations/users.mutations";
+import OrderMutation from "./mutations/orders.mutations";
 import { Products, Shops, Accounts, Orders } from "/lib/collections";
 
 // define query object
@@ -41,27 +43,33 @@ const query = new GraphQLObjectType({
     orders: {
       type: new GraphQLList(OrdersType),
       description: "Returns Orders",
+      args: {
+        email: { type: GraphQLString },
+        orderStatus: { type: GraphQLString }
+      },
       resolve: (root, args) => {
-        if (!args.email) {
-          return "This requires the email parameter to work";
-        } else if (args.email === "admin") {
-          return Orders.find.fetch();
+        console.log(args.email);
+        if (args.email === undefined) {
+          // WORK ON THIS
+          return "The email field is required";
         } else if (args.email === "admin" && args.orderStatus) {
           return Orders.find({ "workflow.status": args.orderStatus }).fetch();
+        } else if (args.email === "admin") {
+          return Orders.find().fetch();
         } else if (args.orderStatus) {
           return Orders.find({ "email": args.email, "workflow.status": args.orderStatus }).fetch();
         }
-        return Orders.find({ email: args.email });
+        return Orders.find({ email: args.email }).fetch();
       }
     }
   })
 });
 
-maskErrors(UserMutation);
+maskErrors(OrderMutation);
 
 const schema = new GraphQLSchema({
   query: query,
-  mutation: UserMutation
+  mutation: OrderMutation
 });
 
 export default schema;
