@@ -48,7 +48,6 @@ const query = new GraphQLObjectType({
         orderStatus: { type: GraphQLString }
       },
       resolve: (root, args) => {
-        console.log(args.email);
         if (args.email === undefined) {
           // WORK ON THIS
           return "The email field is required";
