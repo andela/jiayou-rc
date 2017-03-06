@@ -76,6 +76,23 @@ app.get("/api/users", (request, response) => {
         users {
           userId
           shopId
+          emails{
+            address
+            verified
+            provides
+          }
+          profile{
+            country
+            fullName
+            address1
+            city
+            region
+            phone
+            postal
+            isShippingDefault
+            isBillingDefault
+            isCommercial
+          }
         }
       }`
     },
@@ -86,6 +103,83 @@ app.get("/api/users", (request, response) => {
     })
     .then((res) => {
       response.status(200).json(res.data);
+    })
+    .catch((error) => {
+      response.status(400).send(error);
+    });
+});
+
+app.get("/api/processed_orders/:email", (request, response) => {
+  const email = request.params.email.replace(/"/g, "");
+  axios.post(`http://${request.headers.host}/graphql`,
+    {
+      query: `
+        {
+  orders(email: "${email}", orderStatus: "coreOrderWorkflow/completed"){
+    _id
+    userId
+    shopId
+    status
+    workflow
+    createdAt
+    email
+    packed
+    shipped
+    amount
+    currency
+  }
+}
+      `
+    },
+    {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then((res) => {
+      if (res.data.data.orders.length) {
+        response.status(200).json(res.data);
+      }
+      response.status(404).send("No Data Found for Orders");
+    })
+    .catch((error) => {
+      response.status(400).send(error);
+    });
+});
+
+app.get("/api/cancelled_orders/:email", (request, response) => {
+  const email = request.params.email.replace(/"/g, "");
+  axios.post(`http://${request.headers.host}/graphql`,
+    {query: `
+      {
+        orders (emailID: "${email}",
+        orderStatus: "coreOrderWorkflow/canceled"
+        )
+        {
+    _id
+    userId
+    shopId
+    status
+    workflow
+    createdAt
+    email
+    packed
+    shipped
+    amount
+    currency
+  }
+      }`
+    },
+    {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then((res) => {
+      if (res.data.data.orders.length) {
+        response.status(200).json(res.data);
+      }
+      response.status(404).send("No Data Found for Orders");
     })
     .catch((error) => {
       response.status(400).send(error);
