@@ -1,7 +1,17 @@
 const tour = new Tour({
   name: "tour",
   storage: window.localStorage,
-  backdropContainer: "body",
+  template: `<div class="popover tour-tour tour-tour-0 fade bottom in"
+  role="tooltip" id="step-0" style="top: 55px; left: 230.5px; display: block;">
+  <div class="arrow"></div> <h3 class="popover-title"></h3>
+  <div class="popover-content" style="background-color: aliceblue"></div>
+  <div class="popover-navigation" style="background-color: aliceblue">
+  <div class="btn-group">
+  <button class="btn btn-sm btn-default disabled"
+  data-role="prev">« Prev</button>
+  <button class="btn btn-sm btn-default" data-role="next">Next »</button></div>
+  <button class="btn btn-sm btn-default" data-role="end">End tour</button>
+  </div> </div>`,
   steps: [
     {
       element: "#welcome",

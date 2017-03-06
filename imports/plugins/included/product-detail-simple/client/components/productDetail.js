@@ -112,7 +112,7 @@ class ProductDetail extends Component {
 
 
           <div className="pdp-content">
-            <div className="pdp column left pdp-left-column" id="product-images">
+            <div className="pdp column left pdp-left-column">
               {this.props.mediaGalleryComponent}
               <ProductTags editable={this.props.editable} product={this.product} tags={this.tags} />
               <ProductMetadata editable={this.props.editable} product={this.product} />
