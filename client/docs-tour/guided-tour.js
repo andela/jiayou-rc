@@ -4,8 +4,8 @@ const tour = new Tour({
   template: `<div class="popover tour-tour tour-tour-0 fade bottom in"
   role="tooltip" id="step-0" style="top: 55px; left: 230.5px; display: block;">
   <div class="arrow"></div> <h3 class="popover-title"></h3>
-  <div class="popover-content" style="background-color: aliceblue"></div>
-  <div class="popover-navigation" style="background-color: aliceblue">
+  <div class="popover-content" style="background-color: #dceaf7"></div>
+  <div class="popover-navigation" style="background-color: #dceaf7">
   <div class="btn-group">
   <button class="btn btn-sm btn-default disabled"
   data-role="prev">« Prev</button>
@@ -75,7 +75,7 @@ const tour = new Tour({
       element: ".fa-university",
       title: "Taxes",
       content: "Enable Custom taxes, Avalara, and TaxCloud taxes",
-      placement: "left"
+      placement: "bottom"
     }
   ]
 });
