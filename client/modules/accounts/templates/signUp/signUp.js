@@ -1,5 +1,9 @@
-import { LoginFormSharedHelpers } from "/client/modules/accounts/helpers";
-import { Template } from "meteor/templating";
+import {
+  LoginFormSharedHelpers
+} from "/client/modules/accounts/helpers";
+import {
+  Template
+} from "meteor/templating";
 /**
  * onCreated: Login form sign up view
  */
@@ -50,16 +54,32 @@ Template.loginFormSignUpView.events({
       errors.password = validatedPassword;
     }
     let vendorDetails = {};
-    if (Session.get("signupas") === "Vendor") {
+    if (Session.get("signupas") === "vendor") {
       shopName = template.$(".shop-name").val().trim();
       shopPhone = template.$(".shop-phone").val().trim();
       shopAddress = template.$(".shop-address").val().trim();
-      vendorDetails = { vendorDetails: [{
-        shopName: shopName,
-        shopPhone: shopPhone,
-        shopAddress: shopAddress,
-        isVendor: true,
-        shopActive: false }]
+
+      const validatedShopName = LoginFormValidation.shopName(shopName);
+      const validatedShopPhone = LoginFormValidation.shopPhone(shopPhone);
+      const validatedShopAddress = LoginFormValidation.shopAddress(shopAddress);
+      if (validatedShopName !== true) {
+        errors.shopName = validatedShopName;
+      }
+      if (validatedShopPhone !== true) {
+        errors.shopPhone = validatedShopPhone;
+      }
+      if (validatedShopAddress !== true) {
+        errors.shopAddress = validatedShopAddress;
+      }
+
+      vendorDetails = {
+        vendorDetails: [{
+          shopName: shopName,
+          shopPhone: shopPhone,
+          shopAddress: shopAddress,
+          isVendor: true,
+          shopActive: false
+        }]
       };
     }
     if ($.isEmptyObject(errors) === false) {
@@ -91,10 +111,10 @@ Template.loginFormSignUpView.events({
     const value = $(element).val();
     if (value === "asVendor") {
       $(".vendor-form").css("display", "block");
-      Session.set("signupas", "Vendor");
-    }    else {
+      Session.set("signupas", "vendor");
+    } else {
       $(".vendor-form").css("display", "none");
-      Session.set("signupas", "Customer");
+      Session.set("signupas", "customer");
     }
   }
 });
