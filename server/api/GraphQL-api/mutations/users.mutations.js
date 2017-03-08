@@ -8,6 +8,7 @@ import {
 
 import UsersType from "../schemas/users.schema";
 import { Accounts } from "/lib/collections";
+import { Random } from "meteor/random";
 
 const Email = new GraphQLInputObjectType({
   name: "UserEmail",
@@ -57,9 +58,9 @@ const UserMutation = new GraphQLObjectType({
         profile: { type: Profile }
       },
       resolve(root, args) {
-        Accounts.insert({
-          userId: args.userId,
-          shopId: args.shopId,
+        return Accounts.insert({
+          userId: Random.id(),
+          shopId: Random.id(),
           emails: [{
             address: args.emails[0].address,
             verified: args.emails[0].verified,

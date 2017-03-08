@@ -68,7 +68,7 @@ maskErrors(OrderMutation);
 
 const schema = new GraphQLSchema({
   query: query,
-  mutation: OrderMutation
+  mutation: UserMutation
 });
 
 export default schema;

@@ -1,6 +1,5 @@
 import axios from "axios";
 
-
 class UserController {
   // Method to get users
   static getUsers(request, response) {
@@ -44,84 +43,43 @@ class UserController {
       });
   }
 
-  // Get processed orders
-  static getCompletedOrders(request, response) {
-    const email = request.params.email.replace(/"/g, "");
+  static createUser(request, response) {
+    const isShippingDefault = (request.body.isShippingDefault === "true");
+    const isBillingDefault = (request.body.isBillingDefault === "true");
+    const isCommercial = (request.body.isCommercial === "true");
     axios.post(`http://${request.headers.host}/graphql`,
       {
-        query: `
-        {
-          orders(email: "${email}",
-            orderStatus: "coreOrderWorkflow/completed")
-              {
-                _id
-                userId
-                shopId
-                status
-                workflow
-                createdAt
-                email
-                packed
-                shipped
-                amount
-                currency
-                }
-              }`
-      },
-      {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      .then((res) => {
-        if (res.data.data.orders.length) {
-          response.status(200).json(res.data);
-        }
-        response.status(404).send("No Data Found for Orders");
-      })
-      .catch((error) => {
-        response.status(400).send(error);
-      });
-  }
-
-  // Get pending orders
-  static getPendingOrders(request, response) {
-    // if (request.params("email") === "") {
-    //   response.status(404).send("No email supplied");
-    // }
-    console.log(request);
-    const email = request.params.email.replace(/"/g, "");
-    axios.post(`http://${request.headers.host}/graphql`,
-      {
-        query: `
-      {
-        orders(email: "${email}",
-              orderStatus: "coreOrderWorkflow/processing")
-            {
-              _id
-              userId
-              shopId
-              status
-              workflow
-              createdAt
-              email
-              packed
-              shipped
-              amount
-              currency
+        mutation: `{
+          addUser(
+            emails:  [{
+              provides: "${request.body.provides}",
+              address: "${request.body.address}",
+              verified: ${request.body.verified}
+            }],
+            profile:{
+              addressBook:[{
+                country: "${request.body.country}",
+                fullName: "${request.body.fullName}",
+                address1: "${request.body.address1}",
+                postal: "${request.body.postal}",
+                city: "${request.body.city}",
+                region: "${request.body.region}",
+                phone: "${request.body.phone}",
+                isShippingDefault: ${isShippingDefault},
+                isBillingDefault: ${isBillingDefault},
+                isCommercial: ${isCommercial}
+              }]
             }
-          }`
+          )
+        }`
       },
       {
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/graphql"
         }
       })
       .then((res) => {
-        if (res.data.data.orders.length) {
-          response.status(200).json(res.data);
-        }
-        response.status(404).send("No Data Found for Orders");
+        res.status(201).json({message: "User successfully created"});
       })
       .catch((error) => {
         response.status(400).send(error);
