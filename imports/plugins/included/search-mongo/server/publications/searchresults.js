@@ -9,24 +9,6 @@ const supportedCollections = ["products", "orders", "accounts"];
 function getProductFindTerm(searchTerm, searchTags, userId) {
   const shopId = Reaction.getShopId();
   const findTerm = {
-    shopId: shopId,
-    $text: {$search: searchTerm}
-  };
-  if (searchTags.length) {
-    findTerm.hashtags = {$all: searchTags};
-  }
-  if (!Roles.userIsInRole(userId, ["admin", "owner"], shopId)) {
-    findTerm.isVisible = true;
-  }
-  return findTerm;
-}
-
-export const getResults = {};
-
-getResults.products = function (searchTerm, facets, maxResults) {
-  let productResults;
-  const shopId = Reaction.getShopId();
-  const findTerm = {
     $and: [
       {shopId: shopId},
       {$or: [
@@ -59,13 +41,39 @@ getResults.products = function (searchTerm, facets, maxResults) {
           $options: "i"
         }}
       ]}
-    ]};
-  productResults = ProductSearch.find(findTerm, {
-    limit: maxResults
-  });
+    ]
+  };
+
+  if (searchTags.length) {
+    findTerm.hashtags = {$all: searchTags};
+  }
+  if (!Roles.userIsInRole(userId, ["admin", "owner"], shopId)) {
+    findTerm.isVisible = true;
+  }
+  return findTerm;
+}
+
+export const getResults = {};
+
+getResults.products = function (searchTerm, facets, maxResults, userId) {
+  const searchTags = facets || [];
+  const findTerm = getProductFindTerm(searchTerm, searchTags, userId);
+  const productResults = ProductSearch.find(findTerm,
+    {
+      fields: {
+        score: {$meta: "textScore"},
+        title: 1,
+        hashtags: 1,
+        description: 1,
+        handle: 1,
+        price: 1
+      },
+      sort: {score: {$meta: "textScore"}},
+      limit: maxResults
+    }
+  );
   return productResults;
 };
-
 
 getResults.orders = function (searchTerm, facets, maxResults, userId) {
   let orderResults;
