@@ -23,25 +23,49 @@ function getProductFindTerm(searchTerm, searchTags, userId) {
 
 export const getResults = {};
 
-getResults.products = function (searchTerm, facets, maxResults, userId) {
-  const searchTags = facets || [];
-  const findTerm = getProductFindTerm(searchTerm, searchTags, userId);
-  const productResults = ProductSearch.find(findTerm,
-    {
-      fields: {
-        score: {$meta: "textScore"},
-        title: 1,
-        hashtags: 1,
-        description: 1,
-        handle: 1,
-        price: 1
-      },
-      sort: {score: {$meta: "textScore"}},
-      limit: maxResults
-    }
-  );
+getResults.products = function (searchTerm, facets, maxResults) {
+  let productResults;
+  const shopId = Reaction.getShopId();
+  const findTerm = {
+    $and: [
+      {shopId: shopId},
+      {$or: [
+        { description: {
+          $regex: searchTerm,
+          $options: "i"
+        }},
+        { searchTags: {
+          $regex: searchTerm,
+          $options: "i"
+        }},
+        { title: {
+          $regex: searchTerm,
+          $options: "i"
+        }},
+        { hashtags: {
+          $regex: searchTerm,
+          $options: "i"
+        }},
+        { handle: {
+          $regex: searchTerm,
+          $options: "i"
+        }},
+        { price: {
+          $regex: searchTerm,
+          $options: "i"
+        }},
+        { score: {
+          $regex: searchTerm,
+          $options: "i"
+        }}
+      ]}
+    ]};
+  productResults = ProductSearch.find(findTerm, {
+    limit: maxResults
+  });
   return productResults;
 };
+
 
 getResults.orders = function (searchTerm, facets, maxResults, userId) {
   let orderResults;
