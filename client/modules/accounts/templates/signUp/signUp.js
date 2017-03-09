@@ -1,9 +1,5 @@
-import {
-  LoginFormSharedHelpers
-} from "/client/modules/accounts/helpers";
-import {
-  Template
-} from "meteor/templating";
+import { LoginFormSharedHelpers } from "/client/modules/accounts/helpers";
+import { Template } from "meteor/templating";
 /**
  * onCreated: Login form sign up view
  */
@@ -17,7 +13,7 @@ Template.loginFormSignUpView.onCreated(() => {
  * Helpers: Login form sign up view
  */
 Template.loginFormSignUpView.helpers(LoginFormSharedHelpers);
-Template.loginFormSignUpView.onRendered(function () {
+Template.loginFormSignUpView.onRendered(function() {
   $(".vendor-form").css("display", "none");
 });
 /**
@@ -30,7 +26,7 @@ Template.loginFormSignUpView.events({
    * @param  {Template} template - Blaze Template
    * @return {void}
    */
-  "submit form": function (event, template) {
+  "submit form": function(event, template) {
     event.preventDefault();
     const usernameInput = template.$(".login-input-username");
     const emailInput = template.$(".login-input-email");
@@ -95,7 +91,7 @@ Template.loginFormSignUpView.events({
       password: password,
       profile: vendorDetails
     };
-    Accounts.createUser(newUserData, function (error) {
+    Accounts.createUser(newUserData, function(error) {
       if (error) {
         // Show some error message
         templateInstance.formMessages.set({
@@ -106,7 +102,7 @@ Template.loginFormSignUpView.events({
       }
     });
   },
-  "change .chooseSignupType": function (event, template) {
+  "change .chooseSignupType": function(event, template) {
     const element = template.find("input:radio[name=role]:checked");
     const value = $(element).val();
     if (value === "asVendor") {
