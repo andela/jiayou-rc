@@ -2,7 +2,7 @@ import { Meteor } from "meteor/meteor";
 import * as Collections from "/lib/collections";
 import { Hooks, Logger, Reaction } from "/server/api";
 
-export default function () {
+export default function() {
   /**
    * Make sure initial admin user has verified their
    * email before allowing them to login.
@@ -10,7 +10,7 @@ export default function () {
    * http://docs.meteor.com/#/full/accounts_validateloginattempt
    */
 
-  Accounts.validateLoginAttempt(function (attempt) {
+  Accounts.validateLoginAttempt(function(attempt) {
     if (!attempt.allowed) {
       return false;
     }
@@ -29,7 +29,7 @@ export default function () {
 
     if (loginEmail && loginEmail === adminEmail) {
       // filter out the matching login email from any existing emails
-      const userEmail = _.filter(attempt.user.emails, function (email) {
+      const userEmail = _.filter(attempt.user.emails, function(email) {
         return email.address === loginEmail;
       });
 
@@ -47,7 +47,7 @@ export default function () {
    * creates a login type "anonymous"
    * default for all unauthenticated visitors
    */
-  Accounts.registerLoginHandler(function (options) {
+  Accounts.registerLoginHandler(function(options) {
     if (!options.anonymous) {
       return {};
     }
@@ -78,11 +78,31 @@ export default function () {
    * @see: http://docs.meteor.com/#/full/accounts_oncreateuser
    */
   Accounts.onCreateUser((options, user) => {
+    let isVendor = false;
+    if (Object.keys(options.profile).length !== 0) {
+      isVendor = (options.profile.vendorDetails[0].isVendor) ? options.profile.vendorDetails[0].isVendor : false;
+    }
     const shop = Reaction.getCurrentShop();
     const shopId = shop._id;
-    const defaultVisitorRole =  ["anonymous", "guest", "product", "tag", "index", "cart/checkout", "cart/completed"];
-    const defaultRoles =  ["guest", "account/profile", "product", "tag", "index", "cart/checkout", "cart/completed"];
+    const defaultVisitorRole = ["anonymous", "guest", "product", "tag", "index", "cart/checkout", "cart/completed"];
+    // Check
+    const defaultRoles = ["guest", "account/profile", "product", "tag", "index", "cart/checkout", "cart/completed"];
     const roles = {};
+    const vendorRoles = [
+      "guest",
+      "account/profile",
+      "product",
+      "tag",
+      "index",
+      "cart/checkout",
+      "cart/completed",
+      "dashboard",
+      "createProduct",
+      "reaction-dashboard",
+      "reaction-orders",
+      "orders",
+      "dashboard/orders"
+    ];
     const additionals = {
       profile: Object.assign({}, options && options.profile)
     };
@@ -105,7 +125,11 @@ export default function () {
       if (!user.services) {
         roles[shopId] = shop.defaultVisitorRole || defaultVisitorRole;
       } else {
-        roles[shopId] = shop.defaultRoles || defaultRoles;
+        if (isVendor) {
+          roles[shopId] = vendorRoles;
+        } else {
+          roles[shopId] = shop.defaultRoles || defaultRoles;
+        }
         // also add services with email defined to user.emails[]
         for (const service in user.services) {
           if (user.services[service].email) {
@@ -126,7 +150,7 @@ export default function () {
             additionals.profile.picture = user.services[service].picture;
           } else if (user.services[service].profile_image_url_https) {
             additionals.profile.picture = user.services[service].
-              dprofile_image_url_https;
+            dprofile_image_url_https;
           } else if (user.services[service].profile_picture) {
             additionals.profile.picture = user.services[service].profile_picture;
           }
