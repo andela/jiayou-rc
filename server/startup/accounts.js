@@ -100,8 +100,11 @@ export default function() {
       "createProduct",
       "reaction-dashboard",
       "reaction-orders",
+      "reaction-shipping",
       "orders",
-      "dashboard/orders"
+      "shipping",
+      "dashboard/orders",
+      "dashboard/shipping"
     ];
     const additionals = {
       profile: Object.assign({}, options && options.profile)
