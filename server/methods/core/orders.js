@@ -3,12 +3,31 @@ import path from "path";
 import moment from "moment";
 import accounting from "accounting-js";
 import Future from "fibers/future";
-import { Meteor } from "meteor/meteor";
-import { check } from "meteor/check";
-import { getSlug } from "/lib/api";
-import { Cart, Media, Orders, Products, Shops } from "/lib/collections";
+import {
+  Meteor
+} from "meteor/meteor";
+import {
+  check
+} from "meteor/check";
+import {
+  getSlug
+} from "/lib/api";
+import {
+  Cart,
+  Media,
+  Orders,
+  Products,
+  Shops,
+  Accounts
+} from "/lib/collections";
 import * as Schemas from "/lib/collections/schemas";
-import { Logger, Reaction } from "/server/api";
+import {
+  Logger,
+  Reaction
+} from "/server/api";
+import {
+  HTTP
+} from "meteor/http";
 
 /**
  * Reaction Order Methods
@@ -146,11 +165,9 @@ Meteor.methods({
 
     // Server-side check to make sure discount is not greater than orderTotal.
     const orderTotal = accounting.toFixed(
-      order.billing[0].invoice.subtotal
-      + order.billing[0].invoice.shipping
-      + order.billing[0].invoice.taxes
-      , 2);
-
+      order.billing[0].invoice.subtotal +
+      order.billing[0].invoice.shipping +
+      order.billing[0].invoice.taxes, 2);
 
     if (discount > orderTotal) {
       const error = "Discount is greater than the order total";
@@ -161,10 +178,10 @@ Meteor.methods({
     this.unblock();
 
     const total =
-      order.billing[0].invoice.subtotal
-      + order.billing[0].invoice.shipping
-      + order.billing[0].invoice.taxes
-      - Math.abs(discount);
+      order.billing[0].invoice.subtotal +
+      order.billing[0].invoice.shipping +
+      order.billing[0].invoice.taxes -
+      Math.abs(discount);
 
     return Orders.update(order._id, {
       $set: {
@@ -205,7 +222,6 @@ Meteor.methods({
 
         Meteor.call("workflow/pushItemWorkflow", "coreOrderItemWorkflow/captured", order, itemIds);
 
-
         return this.processPayment(order);
       }
     });
@@ -237,11 +253,13 @@ Meteor.methods({
     });
 
     // TODO: In the future, this could be handled by shipping delivery status
-    const workflowResult = Meteor.call("workflow/pushItemWorkflow", "coreOrderItemWorkflow/shipped", order, itemIds);
+    const workflowResult = Meteor.call("workflow/pushItemWorkflow", "coreOrderItemWorkflow/shipped", order,
+      itemIds);
 
     if (workflowResult === 1) {
       // Move to completed status for items
-      completedItemsResult = Meteor.call("workflow/pushItemWorkflow", "coreOrderItemWorkflow/completed", order, itemIds);
+      completedItemsResult = Meteor.call("workflow/pushItemWorkflow", "coreOrderItemWorkflow/completed", order,
+        itemIds);
 
       if (completedItemsResult === 1) {
         // Then try to mark order as completed.
@@ -324,6 +342,84 @@ Meteor.methods({
    */
   "orders/sendNotification": function (order) {
     check(order, Object);
+    const shoppersPhone = order.billing[0].address.phone;
+    console.log(shoppersPhone);
+    // Loop through orders to get vendor information and send notification to them
+    const orderedItems = order.items;
+    let orderedProducts = "";
+    let vendorPhones = [];
+
+    for (let i = 0; i < orderedItems.length; i += 1) {
+      orderedProducts += `${orderedItems[i].title}`;
+      const productVendor = Accounts.find({
+        _id: orderedItems[i].vendorId
+      }).fetch();
+      Logger.info("Vendor Object", productVendor);
+      vendorPhones.push(productVendor[0].profile.vendorDetails.vendorPhone);
+    }
+
+    Logger.info("Vendor Phones :", vendorPhones);
+    Logger.info("ORDER", order.items);
+
+    const smsContent = {
+      to: shoppersPhone,
+      message: `Receipt for ${orderedProducts} has been received. Thanks.`
+    };
+
+    if (order.workflow.status === "new") {
+      Meteor.call("send/smsAlert", smsContent, (error, result) => {
+        if (error) {
+          Logger.warn("ERROR", error);
+        } else {
+          Logger.info("SMS SENT");
+        }
+      });
+      vendorAlertMessage = "You have pending orders on your Jiayou-RC store";
+      // Filter out the duplicate values
+      vendorPhones = vendorPhones.filter((item, index, inputArray) => {
+        return inputArray.indexOf(item) === index;
+      });
+
+      vendorPhones.forEach((number) => {
+        const vendorSmsContent = {};
+        vendorSmsContent.to = number;
+        vendorSmsContent.message = vendorAlertMessage;
+        Meteor.call("send/smsAlert", vendorSmsContent, (error) => {
+          if (error) {
+            Logger.warn("ERROR", error);
+          } else {
+            Logger.info("SMS SENT");
+          }
+        });
+      });
+    } else if (order.workflow.status === "coreOrderWorkflow/processing") {
+      smsContent.message = "Your orders is on the way and will soon be delivered";
+      Meteor.call("send/smsAlert", smsContent, (error) => {
+        if (error) {
+          Logger.warn("ERROR", error);
+        } else {
+          Logger.info("SMS SENT");
+        }
+      });
+    } else if (order.workflow.status === "coreOrderWorkflow/completed") {
+      smsContent.message = "Your orders has been shipped, thanks.";
+      Meteor.call("send/smsAlert", smsContent, (error) => {
+        if (error) {
+          Logger.warn("ERROR", error);
+        } else {
+          Logger.info("SMS SENT");
+        }
+      });
+    } else if (order.workflow.status === "coreorderWorkflow/canceled") {
+      smsContent.message = "Your order was cancelled";
+      Meteor.call("send/smsAlert", smsContent, (error) => {
+        if (error) {
+          Logger.warn("ERROR", error);
+        } else {
+          Logger.info("SMS SENT");
+        }
+      });
+    }
 
     if (!this.userId) {
       Logger.error("orders/sendNotification: Access denied");
@@ -436,10 +532,29 @@ Meteor.methods({
       from: `${shop.name} <${shop.emails[0].address}>`,
       subject: `Your order is confirmed`,
       // subject: `Order update from ${shop.name}`,
-      html: SSR.render(tpl,  dataForOrderEmail)
+      html: SSR.render(tpl, dataForOrderEmail)
     });
 
     return true;
+  },
+
+  "send/smsAlert": function (smsContent) {
+    check(smsContent, Object);
+    HTTP.call("GET", "http://www.smslive247.com/http/index.aspx", {
+      params: {
+        cmd: "sendquickmsg",
+        owneremail: Meteor.settings.SMS.OWNEREMAIL,
+        subacct: Meteor.settings.SMS.SUBACCT,
+        subacctpwd: Meteor.settings.SMS.SUBACCTPASSWORD,
+        message: smsContent.message,
+        sender: Meteor.settings.SMS.SENDER,
+        sendto: smsContent.to,
+        msgtype: 0
+      }
+    }, (error) => {
+      error ? Logger.warn("ERROR IN SENDING THE SMS", error) :
+        Logger.info("Order sms alert sent to", smsContent.to);
+    });
   },
 
   /**
@@ -610,16 +725,18 @@ Meteor.methods({
     check(cartId, String);
     check(email, String);
     /**
-    *Instead of checking the Orders permission, we should check if user is
-    *connected.This is only needed for guest where email is
-    *provided for tracking order progress.
-    */
+     *Instead of checking the Orders permission, we should check if user is
+     *connected.This is only needed for guest where email is
+     *provided for tracking order progress.
+     */
 
     if (!Meteor.userId()) {
       throw new Meteor.Error(403, "Access Denied. You are not connected.");
     }
 
-    return Orders.update({cartId: cartId}, {
+    return Orders.update({
+      cartId: cartId
+    }, {
       $set: {
         email: email
       }
@@ -702,7 +819,11 @@ Meteor.methods({
         $inc: {
           inventoryQuantity: -item.quantity
         }
-      }, { selector: { type: "variant" } });
+      }, {
+        selector: {
+          type: "variant"
+        }
+      });
     });
   },
 
@@ -775,7 +896,9 @@ Meteor.methods({
               }
             });
 
-            return {error: "orders/capturePayments: Failed to capture transaction"};
+            return {
+              error: "orders/capturePayments: Failed to capture transaction"
+            };
           }
         });
       }
