@@ -133,7 +133,8 @@ Meteor.methods({
     // to `true`
     if (typeof type === "string") {
       Object.assign(address, {
-        [type]: true });
+        [type]: true
+      });
     }
 
     if (oldAddress.isShippingDefault !== address.isShippingDefault ||
