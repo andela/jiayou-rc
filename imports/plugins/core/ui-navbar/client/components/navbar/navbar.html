@@ -5,6 +5,7 @@
     <div class="menu">
       {{> tagNav tagNavProps}}
     </div>
+    {{#if currentUserHasAccess}}
     <div class="dropdown">
       <div class="dropdown-toggle" data-toggle="dropdown">
       <i class="help fa fa-bell fa-1x"><span class="badge label label-danger" style="background-color:red;color:white">1</span></i>
@@ -24,6 +25,7 @@
   </li>
 </ul>
 </div>
+  {{/if}}
     <div class="search">{{> React IconButtonComponent}}</div>
     <div class="languages hidden-xs">{{> i18nChooser}}</div>
     <div class="accounts">{{> accounts tpl="loginDropdown"}}</div>

@@ -48,7 +48,10 @@ Template.CoreNavigationBar.helpers({
       }
     };
   },
-
+  currentUserHasAccess() {
+    return Reaction.hasPermission("admin") ||
+    (!Reaction.hasPermission("anonymous")) ? true : false;
+  },
   tagNavProps() {
     const instance = Template.instance();
     let tags = [];

@@ -3,6 +3,8 @@ import path from "path";
 import moment from "moment";
 import accounting from "accounting-js";
 import Future from "fibers/future";
+import Nexmo from "nexmo";
+
 import {
   Meteor
 } from "meteor/meteor";
@@ -343,7 +345,7 @@ Meteor.methods({
   "orders/sendNotification": function (order) {
     check(order, Object);
     const shoppersPhone = order.billing[0].address.phone;
-    console.log(shoppersPhone);
+    Logger.info(shoppersPhone);
     // Loop through orders to get vendor information and send notification to them
     const orderedItems = order.items;
     let orderedProducts = "";
@@ -351,14 +353,14 @@ Meteor.methods({
 
     for (let i = 0; i < orderedItems.length; i += 1) {
       orderedProducts += `${orderedItems[i].title}`;
-      const productVendor = Accounts.find({
-        _id: orderedItems[i].vendorId
-      }).fetch();
-      Logger.info("Vendor Object", productVendor);
-      vendorPhones.push(productVendor[0].profile.vendorDetails.vendorPhone);
+      // const productVendor = Accounts.find({
+      //   _id: orderedItems[i].vendorId
+      // }).fetch();
+      // Logger.info("Vendor Object", productVendor);
+      // vendorPhones.push(productVendor[0].profile.vendorDetails.vendorPhone);
     }
 
-    Logger.info("Vendor Phones :", vendorPhones);
+    // Logger.info("Vendor Phones :", vendorPhones);
     Logger.info("ORDER", order.items);
 
     const smsContent = {
@@ -540,20 +542,22 @@ Meteor.methods({
 
   "send/smsAlert": function (smsContent) {
     check(smsContent, Object);
-    HTTP.call("GET", "http://www.smslive247.com/http/index.aspx", {
-      params: {
-        cmd: "sendquickmsg",
-        owneremail: Meteor.settings.SMS.OWNEREMAIL,
-        subacct: Meteor.settings.SMS.SUBACCT,
-        subacctpwd: Meteor.settings.SMS.SUBACCTPASSWORD,
-        message: smsContent.message,
-        sender: Meteor.settings.SMS.SENDER,
-        sendto: smsContent.to,
-        msgtype: 0
+    const apiKey = "663abb0f";
+    const apiToken = "c2c465c055722860";
+    const smsPhone = "Reaction Commerce";
+    const phone = "2348063806325";
+    const message = " Your order has been successfully received and is been processed";
+    const nexmo = new Nexmo({
+      apiKey,
+      apiSecret: apiToken
+    });
+    nexmo.message.sendSms(smsPhone, phone, message, {}, (err, res) => {
+      if (err) {
+        return Logger.error(err);
+      } else {
+        Logger.info(res, 'nexmo response');
+        Logger.info("Your New order has been successfully received and is been processed");
       }
-    }, (error) => {
-      error ? Logger.warn("ERROR IN SENDING THE SMS", error) :
-        Logger.info("Order sms alert sent to", smsContent.to);
     });
   },
 
