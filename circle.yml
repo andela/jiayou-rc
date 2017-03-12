@@ -46,9 +46,6 @@ deployment:
       - docker push reactioncommerce/reaction:$CIRCLE_BUILD_NUM
       - docker push reactioncommerce/reaction:latest
 
-  environment:
-    COVERALLS_REPO_TOKEN: "xxx"
-    CIRCLE_ARTIFACTS: "~/node-p2pool/coverage"
 general:
   artifacts:
     - "coverage"
