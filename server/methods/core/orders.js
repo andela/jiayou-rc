@@ -542,10 +542,10 @@ Meteor.methods({
 
   "send/smsAlert": function (smsContent) {
     check(smsContent, Object);
-    const apiKey = "663abb0f";
-    const apiToken = "c2c465c055722860";
-    const smsPhone = "Reaction Commerce";
-    const phone = "2348063806325";
+    const apiKey = Meteor.settings.SMS.APIKEY;
+    const apiToken = Meteor.settings.SMS.APITOKEN;
+    const smsPhone = Meteor.settings.SMS.SENDER;
+    const phone = smsContent.to;
     const message = " Your order has been successfully received and is been processed";
     const nexmo = new Nexmo({
       apiKey,
@@ -555,8 +555,10 @@ Meteor.methods({
       if (err) {
         return Logger.error(err);
       } else {
-        Logger.info(res, 'nexmo response');
+        Logger.info(res);
         Logger.info("Your New order has been successfully received and is been processed");
+        Logger.info(smsPhone);
+        Logger.info(phone);
       }
     });
   },
