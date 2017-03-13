@@ -49,7 +49,7 @@ handlePayment = (transactionId, type) => {
     } else {
       const exchangeRate = getExchangeRate();
       const paystackResponse = response.data.data;
-      const paymentMethod = {
+      const paystackMethod = {
         processor: "Paystack",
         storedCard: paystackResponse.authorization.last4,
         method: "Paystack",
@@ -67,9 +67,24 @@ handlePayment = (transactionId, type) => {
           transactionId: paystackResponse.reference,
           currency: paystackResponse.currency
         });
+        finalizePayment(paystackMethod);
       }
     }
   });
+};
+
+const payWithPaystack = (email, amount, transactionId) => {
+  const payStackConfig = getPayStackSettings();
+  const handler = PaystackPop.setup({
+    key: payStackConfig.settings.publicKey,
+    email: email,
+    amount: amount,
+    ref: transactionId,
+    callback: function (response) {
+      handlePayment(response.reference, "payment");
+    }
+  });
+  handler.openIframe();
 };
 
 Template.paystackPaymentForm.events({
