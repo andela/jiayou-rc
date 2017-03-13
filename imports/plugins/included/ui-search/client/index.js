@@ -2,6 +2,7 @@
 import "./templates/searchModal/searchModal.html";
 import "./templates/searchModal/searchModal.js";
 import "./templates/searchModal/searchInput.html";
+import "./templates/searchModal/searchSort.html";
 import "./templates/searchModal/searchTypeToggle.html";
 import "./templates/searchModal/searchResults.html";
 
