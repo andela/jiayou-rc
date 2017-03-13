@@ -22,8 +22,7 @@ test:
     - meteor npm install
     - SERVER_TEST_REPORTER="dot" meteor test --once --full-app --headless --driver-package dispatch:mocha
     - .reaction/docker/scripts/ci-build.sh
-  post:
-    - istanbul cover npm test
+ 
 
 deployment:
   prequel:
@@ -50,5 +49,5 @@ deployment:
 general:
   artifacts:
     - "coverage"
-after_script:
+    after_script:
   - npm run coveralls
