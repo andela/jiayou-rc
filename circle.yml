@@ -6,12 +6,11 @@ machine:
   pre:
     - hash meteor 2>/dev/null || curl https://install.meteor.com | /bin/sh
     - mkdir -p ~/reaction
+
 dependencies:
   cache_directories:
     - "~/.meteor"
     - "~/docker"
-    pre:
-      - npm install -g istanbul
   override:
     - cd $HOME/reaction
     - .reaction/scripts/clone-packages.sh
@@ -23,7 +22,6 @@ test:
     - meteor npm install
     - SERVER_TEST_REPORTER="dot" meteor test --once --full-app --headless --driver-package dispatch:mocha
     - .reaction/docker/scripts/ci-build.sh
-    post:
     - npm run coverage
 
 deployment:
@@ -50,4 +48,4 @@ deployment:
 
 general:
   artifacts:
-    - ./coverage
+    - "coverage"
