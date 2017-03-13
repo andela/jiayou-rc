@@ -5,6 +5,7 @@ machine:
     - docker
   pre:
     - hash meteor 2>/dev/null || curl https://install.meteor.com | /bin/sh
+    - mkdir -p ~/reaction
     - npm install -g istanbul
 
 dependencies:
@@ -20,7 +21,7 @@ test:
   override:
     - cd $HOME/reaction
     - meteor npm install
-    - SERVER_TEST_REPORTER="dot" meteor test --once --full-app --headless --driver-package dispatch:mocha
+    - SERVER_TEST_REPORTER='dot' meteor test --once --full-app --headless --driver-package dispatch:mocha && istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
     - .reaction/docker/scripts/ci-build.sh
 
 deployment:
