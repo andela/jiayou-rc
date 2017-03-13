@@ -62,7 +62,7 @@ handlePayment = (transactionId, type) => {
       };
       if (type === "payment") {
         paystackMethod.transactions = [];
-        payStackMethod.transactions.push({
+        paystackMethod.transactions.push({
           amount: paystackResponse.amount / 100,
           transactionId: paystackResponse.reference,
           currency: paystackResponse.currency
@@ -99,6 +99,7 @@ Template.paystackPaymentForm.events({
       Alerts.toast("Invalid email address", "error");
       return false;
     }
+    console.log("amount", amount);
     payWithPaystack(userMail, amount, transactionId);
   }
 });
