@@ -13,7 +13,7 @@ const getExchangeRate = () => {
 };
 
 const generateTransactionID = () => {
-  // generate a random 16 digit id for the tramsaction
+  // generate a random 16 digit id for the transaction
   return Random.id(16);
 };
 
@@ -63,7 +63,7 @@ handlePayment = (transactionId, type) => {
       if (type === "payment") {
         paystackMethod.transactions = [];
         paystackMethod.transactions.push({
-          amount: paystackResponse.amount / 100,
+          amount: paystackResponse.amount,
           transactionId: paystackResponse.reference,
           currency: paystackResponse.currency
         });
@@ -78,10 +78,11 @@ const payWithPaystack = (email, amount, transactionId) => {
   const handler = PaystackPop.setup({
     key: payStackConfig.settings.publicKey,
     email: email,
-    amount: amount,
+    amount: amount * 100,
     ref: transactionId,
     callback: function (response) {
       handlePayment(response.reference, "payment");
+      console.log("response", response.reference);
     }
   });
   handler.openIframe();
@@ -99,7 +100,6 @@ Template.paystackPaymentForm.events({
       Alerts.toast("Invalid email address", "error");
       return false;
     }
-    console.log("amount", amount);
     payWithPaystack(userMail, amount, transactionId);
   }
 });
