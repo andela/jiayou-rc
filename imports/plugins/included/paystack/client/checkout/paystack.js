@@ -7,6 +7,71 @@ import { Cart, Shops, Accounts, Packages } from "/lib/collections";
 
 import "./paystack.html";
 
+const getExchangeRate = () => {
+  const shop = Shops.find(Reaction.getShopId()).fetch();
+  return shop[0].currencies.NGN.rate;
+};
+
+const generateTransactionID = () => {
+  // generate a random 16 digit id for the tramsaction
+  return Random.id(16);
+};
+
+const getOrderPrice = () => {
+  const cart = Cart.findOne();
+  const exchangeRate = getExchangeRate();
+  return parseInt(cart.cartTotal() * exchangeRate, 10);
+};
+
+const getPayStackSettings = () => {
+  const packages = Packages.findOne({
+    name: "paystack-paymentmethod",
+    shopId: Reaction.getShopId()
+  });
+  return packages;
+};
+
+const finalizePayment = (payStackMethod) => {
+  Meteor.call("cart/submitPayment", payStackMethod);
+};
+
+handlePayment = (transactionId, type) => {
+  const payStackConfig = getPayStackSettings();
+  HTTP.call("GET", `https://api.paystack.co/transaction/verify/${transactionId}`, {
+    headers: {
+      Authorization: `Bearer ${payStackConfig.settings.secretKey}`
+    }
+  }, function (error, response) {
+    if (error) {
+      Alerts.toast("Unable to verify payment", "error");
+    } else if (response.data.data.status !== "success") {
+      Alerts.toast("Payment was not successful", "error");
+    } else {
+      const exchangeRate = getExchangeRate();
+      const paystackResponse = response.data.data;
+      const paymentMethod = {
+        processor: "Paystack",
+        storedCard: paystackResponse.authorization.last4,
+        method: "Paystack",
+        transactionId: paystackResponse.reference,
+        currency: paystackResponse.currency,
+        amount: paystackResponse.amount * exchangeRate,
+        status: paystackResponse.status,
+        mode: "authorize",
+        createdAt: new Date()
+      };
+      if (type === "payment") {
+        paystackMethod.transactions = [];
+        payStackMethod.transactions.push({
+          amount: paystackResponse.amount / 100,
+          transactionId: paystackResponse.reference,
+          currency: paystackResponse.currency
+        });
+      }
+    }
+  });
+};
+
 Template.paystackPaymentForm.events({
   "click #paywithpaystack": (event) => {
     event.preventDefault();
