@@ -316,6 +316,10 @@ Template.orderStatusDetail.helpers({
     return i18next.t("orderShipping.noTracking");
   },
 
+  orderStatus: function () {
+    return this.workflow.status;
+  },
+
   shipmentStatus() {
     const self = this;
     const shipment = this.shipping[0];
