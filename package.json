@@ -117,7 +117,7 @@
     "test-local": "wdio tests/runner/local.conf.js",
     "test-browserstack": "wdio tests/runner/browserstack.conf.js; kill $(ps aux | grep '[b]rowserstack' | awk '{print $2}')",
     "test": "SERVER_TEST_REPORTER='dot' meteor test --once --full-app --headless --driver-package dispatch:mocha &&./node_modules/.bin/istanbul cover _mocha",
-    "coverage": "istanbul cover npm test",
+    "coverage": "rm -rf ./coverage/ && istanbul cover npm test",
     "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls"
   }
 }
