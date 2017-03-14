@@ -82,7 +82,6 @@ const payWithPaystack = (email, amount, transactionId) => {
     ref: transactionId,
     callback: function (response) {
       handlePayment(response.reference, "payment");
-      console.log("response", response.reference);
     }
   });
   handler.openIframe();
