@@ -165,6 +165,15 @@ Template.searchModal.events({
       $(".search-modal-header").addClass("active-search");
     }
   },
+
+  // "chnage price-select": function(event, template) {
+  //   const state = template.instance();
+  //   const results = state.get('productSearchResults');
+  //   const query = event.targer.value.split('-');
+  //   const resultFiltered = filterPrice(results, query);
+  //   state.set('productSearchResults', resultFiltered);
+  // },
+
   "click [data-event-action=filter]": function (event, templateInstance) {
     event.preventDefault();
     const instance = Template.instance();
@@ -176,6 +185,13 @@ Template.searchModal.events({
     $(event.target).toggleClass("active-tag btn-active");
 
     templateInstance.state.set("facets", facets);
+  },
+  // productSearchSort function
+  "change [data-event-action=sort]": function (event, templateInstance) {
+    const searchResult = templateInstance.state.get("productSearchResults");
+    const sortValue = templateInstance.find("#selectSort").value.split("_");
+    const orderedSort = _.orderBy(searchResult, [sortValue[0]], [sortValue[1]]);
+    templateInstance.state.set("productSearchResults", orderedSort);
   },
   "click [data-event-action=productClick]": function () {
     const instance = Template.instance();
