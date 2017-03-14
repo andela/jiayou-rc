@@ -5,15 +5,12 @@ machine:
     - docker
   pre:
     - hash meteor 2>/dev/null || curl https://install.meteor.com | /bin/sh
-    
+    - npm install -g istanbul
 
 dependencies:
   cache_directories:
     - "~/.meteor"
     - "~/docker"
-  pre:
-    - npm install -g istanbul
-    
   override:
     - mkdir $HOME/reaction
     - cd $HOME/reaction
@@ -26,7 +23,6 @@ test:
     - meteor npm install
     - SERVER_TEST_REPORTER="dot" meteor test --once --full-app --headless --driver-package dispatch:mocha
     - .reaction/docker/scripts/ci-build.sh
-    - npm run coveralls
 
 deployment:
   prequel:
