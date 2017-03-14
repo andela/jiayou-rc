@@ -20,6 +20,7 @@ const generateTransactionID = () => {
 const getOrderPrice = () => {
   const cart = Cart.findOne();
   const exchangeRate = getExchangeRate();
+  klfagmkfm
   return parseInt(cart.cartTotal() * exchangeRate, 10);
 };
 
