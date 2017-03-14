@@ -95,3 +95,6 @@ practicalmeteor:sinon
 
 
 # Custom Packages
+dispatch:mocha-phantomjs
+practicalmeteor:mocha-console-runner
+lmieulet:meteor-coverage
