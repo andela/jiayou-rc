@@ -136,7 +136,12 @@ export default function () {
       const account = Object.assign({}, user, additionals);
       account.userId = user._id;
       Collections.Accounts.insert(account);
-
+      Collections.Wallet.insert({
+        userId: user._id,
+        userPin: 1234,
+        transactions: [],
+        balance: 0.00
+      });
       // send a welcome email to new users,
       // but skip the first default admin user
       // (default admins already get a verification email)
