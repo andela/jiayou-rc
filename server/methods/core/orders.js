@@ -210,6 +210,35 @@ Meteor.methods({
       }
     });
   },
+
+  /**
+   * order/cancelOrder
+   * @summary Adds the cancel order feature
+   * @param {Object} order - order object
+   * @param {Object} newComment - newComment object
+   * @return {Object} return results of several operations
+   */
+  "orders/cancelOrder"(order, newComment) {
+    check(order, Object);
+    check(newComment, Object);
+
+    if (!Reaction.hasPermission("orders")) {
+      throw new Meteor.Error(403, "Access Denied");
+    }
+    // Update Order
+    return Orders.update(order._id, {
+      $set: {
+        "workflow.status": "canceled"
+      },
+      $push: {
+        comments: newComment
+      },
+      $addToSet: {
+        "workflow.workflow": "coreOrderWorkflow/canceled"
+      }
+    });
+  },
+
   /**
    * orders/shipmentShipped
    *

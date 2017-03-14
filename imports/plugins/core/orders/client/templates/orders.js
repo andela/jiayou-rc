@@ -13,6 +13,9 @@ const orderFilters = [{
 }, {
   name: "completed",
   label: "Completed"
+}, {
+  name: "canceled",
+  label: "Canceled"
 }];
 
 const OrderHelper =  {
@@ -163,6 +166,16 @@ Template.ordersListItem.helpers({
 
   orderIsNew(order) {
     return order.workflow.status === "new";
+  },
+  isCanceled(order) {
+    if (order.workflow.status === "canceled") {
+      return true;
+    }
+    return false;
+  },
+
+  canceledReason(order) {
+    return order.comments[0].body;
   }
 });
 
