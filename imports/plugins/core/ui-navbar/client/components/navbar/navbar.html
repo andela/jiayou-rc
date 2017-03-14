@@ -5,27 +5,6 @@
     <div class="menu">
       {{> tagNav tagNavProps}}
     </div>
-    {{#if currentUserHasAccess}}
-    <div class="dropdown">
-      <div class="dropdown-toggle" data-toggle="dropdown">
-      <i class="help fa fa-bell fa-1x"><span class="badge label label-danger" style="background-color:red;color:white">1</span></i>
-      </div>
-    <ul class="dropdown-menu notifications" role="menu" aria-labelledby="menu1">
-  <li class="notification">
-      <div class="media">
-        <div class="media-left">
-          <div class="media-object" style="padding-left:5px">
-           <strong> <a href="#"> <i class="fa fa-info-circle"> </i> </a></strong>
-          </div>
-        </div>
-        <div class="media-body">
-          <strong class="notification-title"><a href="#">You have a new order from Mr Jiayou</a></strong>
-        </div>
-      </div>
-  </li>
-</ul>
-</div>
-  {{/if}}
     <div class="search">{{> React IconButtonComponent}}</div>
     <div class="languages hidden-xs">{{> i18nChooser}}</div>
     <div class="accounts">{{> accounts tpl="loginDropdown"}}</div>

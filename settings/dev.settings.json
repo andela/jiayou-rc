@@ -2,17 +2,15 @@
   "ROOT_URL": "",
   "MAIL_URL": "",
   "reaction": {
-    "REACTION_USER": "nelsonabieno",
-    "REACTION_AUTH": "123456789",
-    "REACTION_EMAIL": "rotimi.nelson@andela.com"
+    "REACTION_USER": "",
+    "REACTION_AUTH": "",
+    "REACTION_EMAIL": ""
   },
   "isDebug": "info",
   "public": {},
   "SMS": {
-    "OWNEREMAIL": "",
-    "SUBACCT": "",
-    "SENDER": "",
-    "SUBACCTPASSWORD": "",
-    "APIURL": ""
+    "APIKEY": "",
+    "APITOKEN": "",
+    "SENDER": ""
   }
 }

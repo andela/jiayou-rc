@@ -353,21 +353,21 @@ Meteor.methods({
 
     for (let i = 0; i < orderedItems.length; i += 1) {
       orderedProducts += `${orderedItems[i].title}`;
-      // const productVendor = Accounts.find({
-      //   _id: orderedItems[i].vendorId
-      // }).fetch();
-      // Logger.info("Vendor Object", productVendor);
+      const productVendor = Accounts.find({
+        _id: orderedItems[i].vendorId
+      }).fetch();
+      Logger.info("Product Vendor Object", productVendor);
       // vendorPhones.push(productVendor[0].profile.vendorDetails.vendorPhone);
     }
-
-    // Logger.info("Vendor Phones :", vendorPhones);
-    Logger.info("ORDER", order.items);
+    Logger.info("CUSTOMER ORDER DETAILS", order.items);
+    Logger.info("CUSTOMER'S EMAIL", order.email);
+    Logger.info("CUSTOMERS PHONE NO " + shoppersPhone);
 
     const smsContent = {
       to: shoppersPhone,
       message: `Receipt for ${orderedProducts} has been received. Thanks.`
     };
-
+    Logger.info("smsContent for Vendor", smsContent);
     if (order.workflow.status === "new") {
       Meteor.call("send/smsAlert", smsContent, (error, result) => {
         if (error) {
@@ -433,7 +433,9 @@ Meteor.methods({
     // Get Shop information
     const shop = Shops.findOne(order.shopId);
     const shopContact = shop.addressBook[0];
-
+    Logger.info(shopContact);
+    Logger.info("VENDOR'S/SHOP OWNER EMAIL ", shop.emails[0].address);
+    Logger.info(`SHOP NAME : ${shop.name}`);
     // Get shop logo, if available
     let emailLogo;
     if (Array.isArray(shop.brandAssets)) {
@@ -533,7 +535,13 @@ Meteor.methods({
       to: order.email,
       from: `${shop.name} <${shop.emails[0].address}>`,
       subject: `Your order is confirmed`,
-      // subject: `Order update from ${shop.name}`,
+      html: SSR.render(tpl, dataForOrderEmail)
+    });
+
+    Reaction.Email.send({
+      to: shop.emails[0].address,
+      from: `${shop.name}`,
+      subject: `Your have a new order on your ${shop.name} store`,
       html: SSR.render(tpl, dataForOrderEmail)
     });
 
