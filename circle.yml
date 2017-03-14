@@ -27,13 +27,7 @@ deployment:
   prequel:
     branch: development
     commands:
-      - docker tag reactioncommerce/base:latest reactioncommerce/base:devel
-      - docker tag reactioncommerce/reaction:latest reactioncommerce/prequel:latest
-      - docker tag reactioncommerce/reaction:latest reactioncommerce/prequel:$CIRCLE_BUILD_NUM
-      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker push reactioncommerce/base:devel
-      - docker push reactioncommerce/prequel:$CIRCLE_BUILD_NUM
-      - docker push reactioncommerce/prequel:latest
+      - JIAYOU_RC_TRIGGER
   release:
     branch: master
     commands:
