@@ -116,6 +116,7 @@
     "del-report": "rm -rf ~/allure-report && rm -rf allure-results",
     "test-local": "wdio tests/runner/local.conf.js",
     "test-browserstack": "wdio tests/runner/browserstack.conf.js; kill $(ps aux | grep '[b]rowserstack' | awk '{print $2}')",
-    "test": "SERVER_TEST_REPORTER='dot' meteor test --once --full-app --headless --driver-package dispatch:mocha"
+    "test": "SERVER_TEST_REPORTER='dot' meteor test --once --full-app --headless --driver-package dispatch:mocha &&./node_modules/.bin/istanbul cover _mocha",
+    "coverage": "istanbul cover npm test"
   }
 }
