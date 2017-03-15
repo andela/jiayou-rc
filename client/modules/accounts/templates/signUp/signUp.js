@@ -1,3 +1,5 @@
+/*global someFunction b:true*/
+/*eslint-disable eslint no-undef*/
 import { LoginFormSharedHelpers } from "/client/modules/accounts/helpers";
 import { Template } from "meteor/templating";
 /**
