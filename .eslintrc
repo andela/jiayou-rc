@@ -8,9 +8,6 @@
     "globals": {
         "_": true
     },
-    "ecmaFeatures": {"globalReturn": false},
-    "rules": {"no-undef": 2},
-
   "parserOptions": {
      "ecmaVersion": 6,
      "sourceType": "module",
@@ -18,6 +15,8 @@
   },
   "plugins": ["react"],
   "ecmaFeatures": {
+    "globalReturn": false,
+    "rules": {"no-undef": 2},
     "arrowFunctions": true,
     "blockBindings": true,
     "classes": true,
