@@ -10,7 +10,7 @@ Npm.depends({
   "gridfs-stream": "1.1.1"
 });
 
-Package.onUse(function(api) {
+Package.onUse(function (api) {
   api.versionsFrom("1.0");
 
   api.use(["cfs:base-package@0.0.30", "cfs:storage-adapter@0.2.1"]);
@@ -18,7 +18,7 @@ Package.onUse(function(api) {
   api.addFiles("gridfs.client.js", "client");
 });
 
-Package.onTest(function(api) {
+Package.onTest(function (api) {
   api.use(["ecmascript", "practicalmeteor:mocha", "practicalmeteor:chai",
     "practicalmeteor:sinon", "lmieulet:meteor-coverage@1.1.4"
   ]);
