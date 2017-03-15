@@ -8,6 +8,3 @@ scss:
 ignore_file: .eslintignore
 
 fail_on_violations: true
-
-no-undef:
-  enabled: false
