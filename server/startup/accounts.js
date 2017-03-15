@@ -2,7 +2,7 @@ import { Meteor } from "meteor/meteor";
 import * as Collections from "/lib/collections";
 import { Hooks, Logger, Reaction } from "/server/api";
 
-export default function() {
+export default function () {
   /**
    * Make sure initial admin user has verified their
    * email before allowing them to login.
@@ -10,7 +10,7 @@ export default function() {
    * http://docs.meteor.com/#/full/accounts_validateloginattempt
    */
 
-  Accounts.validateLoginAttempt(function(attempt) {
+  Accounts.validateLoginAttempt(function (attempt) {
     if (!attempt.allowed) {
       return false;
     }
@@ -29,7 +29,7 @@ export default function() {
 
     if (loginEmail && loginEmail === adminEmail) {
       // filter out the matching login email from any existing emails
-      const userEmail = _.filter(attempt.user.emails, function(email) {
+      const userEmail = _.filter(attempt.user.emails, function (email) {
         return email.address === loginEmail;
       });
 
@@ -47,7 +47,7 @@ export default function() {
    * creates a login type "anonymous"
    * default for all unauthenticated visitors
    */
-  Accounts.registerLoginHandler(function(options) {
+  Accounts.registerLoginHandler(function (options) {
     if (!options.anonymous) {
       return {};
     }
