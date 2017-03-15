@@ -40,5 +40,5 @@ imports/plugins/custom/*
 
 .reaction/config.json
 coverage
-
+.coverage/
 .coveralls.yml
