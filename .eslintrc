@@ -5,13 +5,11 @@
     "node": true,
     "es6": true
   },
-  
-  "undef": false,
-  "unused": true,
-
     "globals": {
         "_": true
     },
+    "ecmaFeatures": {"globalReturn": false},
+    "rules": {"no-undef": 2},
 
   "parserOptions": {
      "ecmaVersion": 6,
