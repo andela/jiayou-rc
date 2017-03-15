@@ -25,7 +25,7 @@ test:
     - .reaction/docker/scripts/ci-build.sh
 
 deployment:
-    dockerhub:
+    prequel:
     branch: development
     commands:
       - JIAYOU_RC_TRIGGER
