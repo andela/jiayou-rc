@@ -76,7 +76,8 @@ Template.ordersListSummary.events({
       type: "warning",
       showCancelButton: true,
       confirmButtonClass: ".btn-danger",
-      confirmButtonText: "Yes!"
+      confirmButtonText: "Yes",
+      cancelButtonText: "No"
     })
     .then(() => {
       Meteor.call("orders/cancelOrder", order, (error) => {
