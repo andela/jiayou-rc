@@ -15,7 +15,7 @@ Template.loginFormSignUpView.onCreated(() => {
  */
 Template.loginFormSignUpView.helpers(LoginFormSharedHelpers);
 
-Template.loginFormSignUpView.onRendered(function() {
+Template.loginFormSignUpView.onRendered(function () {
   $(".vendor-form").css("display", "none");
 });
 /**
