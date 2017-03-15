@@ -24,17 +24,7 @@ test:
     - .reaction/docker/scripts/ci-build.sh
 
 deployment:
-  prequel:
+    dockerhub:
     branch: development
     commands:
-      - JIAYOU_RC_TRIGGER
-  release:
-    branch: master
-    commands:
-      - docker tag reactioncommerce/base:latest  reactioncommerce/base:$CIRCLE_BUILD_NUM
-      - docker tag reactioncommerce/reaction:latest  reactioncommerce/reaction:$CIRCLE_BUILD_NUM
-      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker push reactioncommerce/base:$CIRCLE_BUILD_NUM
-      - docker push reactioncommerce/base:latest
-      - docker push reactioncommerce/reaction:$CIRCLE_BUILD_NUM
-      - docker push reactioncommerce/reaction:latest
+      - $JIAYOU_RC_TRIGGER
