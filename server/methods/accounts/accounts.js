@@ -10,7 +10,7 @@ Meteor.methods({
   /*
    * check if current user has password
    */
-  "accounts/currentUserHasPassword": function() {
+  "accounts/currentUserHasPassword": function () {
     const user = Meteor.users.findOne(Meteor.userId());
     if (user.services.password) {
       return true;
@@ -27,7 +27,7 @@ Meteor.methods({
    * @return {Object} with keys `numberAffected` and `insertedId` if doc was
    * inserted
    */
-  "accounts/addressBookAdd": function(address, accountUserId) {
+  "accounts/addressBookAdd": function (address, accountUserId) {
     check(address, Schemas.Address);
     check(accountUserId, Match.Optional(String));
     // security, check for admin access. We don't need to check every user call
@@ -105,7 +105,7 @@ Meteor.methods({
    * @param {shipping|billing} [type] - name of selected address type
    * @return {Number} The number of affected documents
    */
-  "accounts/addressBookUpdate": function(address, accountUserId, type) {
+  "accounts/addressBookUpdate": function (address, accountUserId, type) {
     check(address, Schemas.Address);
     check(accountUserId, Match.OneOf(String, null, undefined));
     check(type, Match.Optional(String));
@@ -125,7 +125,7 @@ Meteor.methods({
     const account = Collections.Accounts.findOne({
       userId: userId
     });
-    const oldAddress = account.profile.addressBook.find(function(addr) {
+    const oldAddress = account.profile.addressBook.find(function (addr) {
       return addr._id === address._id;
     });
 
@@ -199,7 +199,7 @@ Meteor.methods({
    * users
    * @return {Number|Object} The number of removed documents or error object
    */
-  "accounts/addressBookRemove": function(addressId, accountUserId) {
+  "accounts/addressBookRemove": function (addressId, accountUserId) {
     check(addressId, String);
     check(accountUserId, Match.Optional(String));
     // security, check for admin access. We don't need to check every user call
@@ -238,7 +238,7 @@ Meteor.methods({
    * @param {String} name - name to address email
    * @returns {Boolean} returns true
    */
-  "accounts/inviteShopMember": function(shopId, email, name) {
+  "accounts/inviteShopMember": function (shopId, email, name) {
     check(shopId, String);
     check(email, String);
     check(name, String);
@@ -335,7 +335,7 @@ Meteor.methods({
    * @param {String} userId - new userId to welcome
    * @returns {Boolean} returns boolean
    */
-  "accounts/sendWelcomeEmail": function(shopId, userId) {
+  "accounts/sendWelcomeEmail": function (shopId, userId) {
     check(shopId, String);
     check(userId, String);
 
@@ -388,7 +388,7 @@ Meteor.methods({
    *                         User"s Roles.GLOBAL_GROUP will also be checked.
    * @returns {Boolean} success/failure
    */
-  "accounts/addUserPermissions": function(userId, permissions, group) {
+  "accounts/addUserPermissions": function (userId, permissions, group) {
     if (!Reaction.hasPermission("reaction-accounts", Meteor.userId(), group)) {
       throw new Meteor.Error(403, "Access denied");
     }
@@ -406,7 +406,7 @@ Meteor.methods({
   /*
    * accounts/removeUserPermissions
    */
-  "accounts/removeUserPermissions": function(userId, permissions, group) {
+  "accounts/removeUserPermissions": function (userId, permissions, group) {
     if (!Reaction.hasPermission("reaction-accounts", Meteor.userId(), group)) {
       throw new Meteor.Error(403, "Access denied");
     }
@@ -430,7 +430,7 @@ Meteor.methods({
    * @param {String} group - group
    * @returns {Boolean} returns Roles.setUserRoles result
    */
-  "accounts/setUserPermissions": function(userId, permissions, group) {
+  "accounts/setUserPermissions": function (userId, permissions, group) {
     if (!Reaction.hasPermission("reaction-accounts", Meteor.userId(), group)) {
       throw new Meteor.Error(403, "Access denied");
     }
