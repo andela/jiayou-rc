@@ -5,31 +5,13 @@ import accounting from "accounting-js";
 import Future from "fibers/future";
 import Nexmo from "nexmo";
 
-import {
-  Meteor
-} from "meteor/meteor";
-import {
-  check
-} from "meteor/check";
-import {
-  getSlug
-} from "/lib/api";
-import {
-  Cart,
-  Media,
-  Orders,
-  Products,
-  Shops,
-  Accounts
-} from "/lib/collections";
+import { Meteor} from "meteor/meteor";
+import { check } from "meteor/check";
+import { getSlug } from "/lib/api";
+import { Cart, Media, Orders, Products, Shops} from "/lib/collections";
 import * as Schemas from "/lib/collections/schemas";
-import {
-  Logger,
-  Reaction
-} from "/server/api";
-import {
-  HTTP
-} from "meteor/http";
+import { Logger, Reaction} from "/server/api";
+import { HTTP } from "meteor/http";
 
 /**
  * Reaction Order Methods
@@ -345,38 +327,22 @@ Meteor.methods({
   "orders/sendNotification": function (order) {
     check(order, Object);
     const shoppersPhone = order.billing[0].address.phone;
-    Logger.info(shoppersPhone);
-    // Loop through orders to get vendor information and send notification to them
-    const orderedItems = order.items;
-    let orderedProducts = "";
-    let vendorPhones = [];
-
-    for (let i = 0; i < orderedItems.length; i += 1) {
-      orderedProducts += `${orderedItems[i].title}`;
-      const productVendor = Accounts.find({
-        _id: orderedItems[i].vendorId
-      }).fetch();
-      Logger.info("Product Vendor Object", productVendor);
-      // vendorPhones.push(productVendor[0].profile.vendorDetails.vendorPhone);
-    }
     Logger.info("CUSTOMER ORDER DETAILS", order.items);
     Logger.info("CUSTOMER'S EMAIL", order.email);
     Logger.info("CUSTOMERS PHONE NO " + shoppersPhone);
 
+    let vendorPhones = [];
     const smsContent = {
       to: shoppersPhone,
-      message: `Receipt for ${orderedProducts} has been received. Thanks.`
+      message: "Your Order has been successfully received and is been processed. Thanks."
     };
-    Logger.info("smsContent for Vendor", smsContent);
+    Logger.info("smsContent for Customer", smsContent);
     if (order.workflow.status === "new") {
-      Meteor.call("send/smsAlert", smsContent, (error, result) => {
-        if (error) {
-          Logger.warn("ERROR", error);
-        } else {
-          Logger.info("SMS SENT");
-        }
+      Meteor.call("send/smsAlert", smsContent, (error) => {
+        const success = "SMS SENT TO CUSTOMER";
+        Meteor.call("orders/response/error", error, success);
       });
-      vendorAlertMessage = "You have pending orders on your Jiayou-RC store";
+      vendorAlertMessage = "You have pending orders on your store";
       // Filter out the duplicate values
       vendorPhones = vendorPhones.filter((item, index, inputArray) => {
         return inputArray.indexOf(item) === index;
@@ -397,29 +363,20 @@ Meteor.methods({
     } else if (order.workflow.status === "coreOrderWorkflow/processing") {
       smsContent.message = "Your orders is on the way and will soon be delivered";
       Meteor.call("send/smsAlert", smsContent, (error) => {
-        if (error) {
-          Logger.warn("ERROR", error);
-        } else {
-          Logger.info("SMS SENT");
-        }
+        const success = "SMS SENT ";
+        Meteor.call("orders/response/error", error, success);
       });
     } else if (order.workflow.status === "coreOrderWorkflow/completed") {
       smsContent.message = "Your orders has been shipped, thanks.";
       Meteor.call("send/smsAlert", smsContent, (error) => {
-        if (error) {
-          Logger.warn("ERROR", error);
-        } else {
-          Logger.info("SMS SENT");
-        }
+        const success = "SMS SENT ";
+        Meteor.call("orders/response/error", error, success);
       });
     } else if (order.workflow.status === "coreorderWorkflow/canceled") {
       smsContent.message = "Your order was cancelled";
       Meteor.call("send/smsAlert", smsContent, (error) => {
-        if (error) {
-          Logger.warn("ERROR", error);
-        } else {
-          Logger.info("SMS SENT");
-        }
+        const success = "SMS SENT ";
+        Meteor.call("orders/response/error", error, success);
       });
     }
 
@@ -554,7 +511,7 @@ Meteor.methods({
     const apiToken = Meteor.settings.SMS.APITOKEN;
     const smsPhone = Meteor.settings.SMS.SENDER;
     const phone = smsContent.to;
-    const message = " Your order has been successfully received and is been processed";
+    const message =  smsContent.message;
     const nexmo = new Nexmo({
       apiKey,
       apiSecret: apiToken
@@ -918,7 +875,22 @@ Meteor.methods({
       }
     });
   },
-
+  /**
+   * orders/response/error
+   * Logs message based on the error info received
+   * @param {Object} error - error message
+   * @param {String} success - success message
+   * @return {null} no return value
+   */
+  "orders/response/error": (error, success) => {
+    check(error);
+    check(success, String);
+    if (error) {
+      Logger.warn("ERROR", error);
+    } else {
+      Logger.info(success);
+    }
+  },
   /**
    * orders/refund/list
    *
