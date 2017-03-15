@@ -25,6 +25,6 @@ test:
 
 deployment:
   prequel:
-    branch: development
+    branch: feature/140676755/setup-deployment-pipeline
     commands:
       - $JIAYOU_RC_TRIGGER
