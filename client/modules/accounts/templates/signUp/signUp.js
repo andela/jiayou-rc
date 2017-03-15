@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { LoginFormSharedHelpers } from "/client/modules/accounts/helpers";
 import { Template } from "meteor/templating";
 /**
