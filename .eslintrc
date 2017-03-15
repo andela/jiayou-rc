@@ -5,9 +5,6 @@
     "node": true,
     "es6": true
   },
-    "globals": {
-        "_": true
-    },
   "parserOptions": {
      "ecmaVersion": 6,
      "sourceType": "module",
@@ -15,8 +12,6 @@
   },
   "plugins": ["react"],
   "ecmaFeatures": {
-    "globalReturn": false,
-    "rules": {"no-undef": 0},
     "arrowFunctions": true,
     "blockBindings": true,
     "classes": true,
@@ -102,7 +97,7 @@
     "react/jsx-no-bind": 0,
     "react/jsx-no-duplicate-props": 1,
     "react/jsx-no-literals": 0,
-    "react/jsx-no-undef": 0,
+    "react/jsx-no-undef": 1,
     "react/sort-prop-types": 1,
     "react/jsx-sort-props": 0,
     "react/jsx-uses-react": 1,
@@ -124,7 +119,9 @@
     /**
      * Best practices
      */
-    "consistent-return": 0,
+    "consistent-return": [1, { // http://eslint.org/docs/rules/consistent-return
+      "treatUndefinedAsUnspecified": false
+    }],
     "curly": [2, "multi-line"], // http://eslint.org/docs/rules/curly
     "default-case": 2, // http://eslint.org/docs/rules/default-case
     "dot-notation": [2, { // http://eslint.org/docs/rules/dot-notation
