@@ -1,0 +1,32 @@
+<template name="searchFilter">
+  <div class="rui search-modal-Filter">
+    <div class="row">
+      <div class="col-md-12">
+      <div class="col-md-6">
+    <div class="rui select">
+    <select id="brandFilter">
+      <option value="">Filter by brand</option>
+      {{ #each vendor in data }}
+      <option value="{{ vendor }}">{{ vendor }}</option>
+        {{ /each }}
+    </select>
+    </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="rui select">
+        <select name="" id="priceFilter">
+          <option value="null">Filter by price</option>
+          <option value="0_15">below - $15</option>
+          <option value="15_100">$15 - $100</option>
+          <option value="100_505">$100 - $505</option>
+          <option value="505_1000">$505 - $1000</option>
+          <option value="1000_2005">$1000 - $2005</option>
+          <option value="2005_above">$2005 - above</option>
+        </select>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+</template>
