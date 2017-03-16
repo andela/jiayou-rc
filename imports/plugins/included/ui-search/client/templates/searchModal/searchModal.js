@@ -1,4 +1,5 @@
 import _ from "lodash";
+import __ from "underscore";
 import React from "react";
 import { DataType } from "react-taco-table";
 import { Template } from "meteor/templating";
@@ -19,7 +20,7 @@ function tagToggle(arr, val) {
 /*
  * searchModal onCreated
  */
-Template.searchModal.onCreated(function () {
+Template.searchModal.onCreated(() => {
   this.state = new ReactiveDict();
   this.state.setDefault({
     initialLoad: true,
@@ -31,8 +32,8 @@ Template.searchModal.onCreated(function () {
   });
 
 
-  // Allow modal to be closed by clicking ESC
-  // Must be done in Template.searchModal.onCreated and not in Template.searchModal.events
+    // Allow modal to be closed by clicking ESC
+    // Must be done in Template.searchModal.onCreated and not in Template.searchModal.events
   $(document).on("keyup", (event) => {
     if (event.keyCode === 27) {
       const view = this.view;
@@ -43,6 +44,20 @@ Template.searchModal.onCreated(function () {
     }
   });
 
+  filterPrice = (products, query) => {
+    return _.filter(products, (product) => {
+      if (product.price) {
+        const productMaxPrice = parseFloat(product.price.max);
+        const productMinPrice = parseFloat(product.price.min);
+        const queryMaxPrice = parseFloat(query[1]);
+        const queryMinPrice = parseFloat(query[0]);
+        if (productMinPrice >= queryMinPrice && productMaxPrice <= queryMaxPrice) {
+          return product;
+        }
+      }
+    });
+  };
+
 
   this.autorun(() => {
     const searchCollection = this.state.get("searchCollection") || "products";
@@ -51,9 +66,9 @@ Template.searchModal.onCreated(function () {
     const sub = this.subscribe("SearchResults", searchCollection, searchQuery, facets);
 
     if (sub.ready()) {
-      /*
-       * Product Search
-       */
+            /*
+             * Product Search
+             */
       if (searchCollection === "products") {
         const productResults = ProductSearch.find().fetch();
         const productResultsCount = productResults.length;
@@ -75,29 +90,29 @@ Template.searchModal.onCreated(function () {
         }).fetch();
         this.state.set("tagSearchResults", tagResults);
 
-        // TODO: Do we need this?
+                // TODO: Do we need this?
         this.state.set("accountSearchResults", "");
         this.state.set("orderSearchResults", "");
       }
 
-      /*
-       * Account Search
-       */
+            /*
+             * Account Search
+             */
       if (searchCollection === "accounts") {
         const accountResults = AccountSearch.find().fetch();
         const accountResultsCount = accountResults.length;
         this.state.set("accountSearchResults", accountResults);
         this.state.set("accountSearchCount", accountResultsCount);
 
-        // TODO: Do we need this?
+                // TODO: Do we need this?
         this.state.set("orderSearchResults", "");
         this.state.set("productSearchResults", "");
         this.state.set("tagSearchResults", "");
       }
 
-      /*
-       * Order Search
-       */
+            /*
+             * Order Search
+             */
       if (searchCollection === "orders") {
         const orderResults = OrderSearch.find().fetch();
         const orderResultsCount = orderResults.length;
@@ -105,7 +120,7 @@ Template.searchModal.onCreated(function () {
         this.state.set("orderSearchCount", orderResultsCount);
 
 
-        // TODO: Do we need this?
+                // TODO: Do we need this?
         this.state.set("accountSearchResults", "");
         this.state.set("productSearchResults", "");
         this.state.set("tagSearchResults", "");
@@ -147,7 +162,14 @@ Template.searchModal.helpers({
   },
   showSearchResults() {
     return false;
+  },
+  getBrands() {
+    const instance = Template.instance();
+    const result = instance.state.get("productSearchResults");
+    const brand = __.pluck(result, ["vendor"]);
+    return __.uniq(brand) || [];
   }
+
 });
 
 
@@ -155,7 +177,7 @@ Template.searchModal.helpers({
  * searchModal events
  */
 Template.searchModal.events({
-  // on type, reload Reaction.SaerchResults
+    // on type, reload Reaction.SaerchResults
   "keyup input": (event, templateInstance) => {
     event.preventDefault();
     const searchQuery = templateInstance.find("#search-input").value;
@@ -165,16 +187,7 @@ Template.searchModal.events({
       $(".search-modal-header").addClass("active-search");
     }
   },
-
-  // "chnage price-select": function(event, template) {
-  //   const state = template.instance();
-  //   const results = state.get('productSearchResults');
-  //   const query = event.targer.value.split('-');
-  //   const resultFiltered = filterPrice(results, query);
-  //   state.set('productSearchResults', resultFiltered);
-  // },
-
-  "click [data-event-action=filter]": function (event, templateInstance) {
+  "click [data-event-action=filter]": (event, templateInstance) => {
     event.preventDefault();
     const instance = Template.instance();
     const facets = instance.state.get("facets") || [];
@@ -186,27 +199,34 @@ Template.searchModal.events({
 
     templateInstance.state.set("facets", facets);
   },
-  // productSearchSort function
-  "change [data-event-action=sort]": function (event, templateInstance) {
+    // productSearchSort function
+  "change [data-event-action=sort]": (event, templateInstance) => {
     const searchResult = templateInstance.state.get("productSearchResults");
     const sortValue = templateInstance.find("#selectSort").value.split("_");
     const orderedSort = _.orderBy(searchResult, [sortValue[0]], [sortValue[1]]);
     templateInstance.state.set("productSearchResults", orderedSort);
   },
-  "click [data-event-action=productClick]": function () {
+    // productSearchFilter function
+  "change #priceFilter": (event, templateInstance) => {
+    const searchResult = templateInstance.state.get("productSearchResults");
+    const filterValue = templateInstance.find("#priceFilter").value.split("_");
+    const newFilterValue = filterPrice(searchResult, filterValue);
+    templateInstance.state.set("productSearchResults", newFilterValue);
+  },
+  "click [data-event-action=productClick]": () => {
     const instance = Template.instance();
     const view = instance.view;
     $(".js-search-modal").delay(400).fadeOut(400, () => {
       Blaze.remove(view);
     });
   },
-  "click [data-event-action=clearSearch]": function (event, templateInstance) {
+  "click [data-event-action=clearSearch]": (event, templateInstance) => {
     $("#search-input").val("");
     $("#search-input").focus();
     const searchQuery = templateInstance.find("#search-input").value;
     templateInstance.state.set("searchQuery", searchQuery);
   },
-  "click [data-event-action=searchCollection]": function (event, templateInstance) {
+  "click [data-event-action=searchCollection]": (event, templateInstance) => {
     event.preventDefault();
     const searchCollection = $(event.target).data("event-value");
 
@@ -224,6 +244,6 @@ Template.searchModal.events({
  * searchModal onDestroyed
  */
 Template.searchModal.onDestroyed(() => {
-  // Kill Allow modal to be closed by clicking ESC, which was initiated in Template.searchModal.onCreated
+    // Kill Allow modal to be closed by clicking ESC, which was initiated in Template.searchModal.onCreated
   $(document).off("keyup");
 });
