@@ -203,8 +203,8 @@ export default function () {
       Meteor.users.update({
         _id: options.user._id
       }, update, {
-          multi: true
-        });
+        multi: true
+      });
       // debug info
       Logger.debug("removed anonymous role from user: " +
         options.user._id);
