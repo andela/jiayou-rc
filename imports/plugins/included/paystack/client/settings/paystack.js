@@ -20,11 +20,11 @@ Template.paystackSettings.helpers({
 
 AutoForm.hooks({
   "paystack-update-form": {
-    onSuccess: function () {
+    onSuccess: () => {
       Alerts.removeSeen();
       return Alerts.add("Paystack settings saved.", "success");
     },
-    onError: function (operation, error) {
+    onError: (operation, error) => {
       Alerts.removeSeen();
       return Alerts.add(`Paystack settings update failed. ${error}`, "danger");
     }

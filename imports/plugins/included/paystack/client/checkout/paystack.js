@@ -24,11 +24,10 @@ const getOrderPrice = () => {
 };
 
 const getPayStackSettings = () => {
-  const packages = Packages.findOne({
+  return Packages.findOne({
     name: "paystack-paymentmethod",
     shopId: Reaction.getShopId()
   });
-  return packages;
 };
 
 const finalizePayment = (payStackMethod) => {
@@ -41,7 +40,7 @@ handlePayment = (transactionId, type) => {
     headers: {
       Authorization: `Bearer ${payStackConfig.settings.secretKey}`
     }
-  }, function (error, response) {
+  }, (error, response) => {
     if (error) {
       Alerts.toast("Unable to verify payment", "error");
     } else if (response.data.data.status !== "success") {
@@ -80,7 +79,7 @@ const payWithPaystack = (email, amount, transactionId) => {
     email: email,
     amount: amount * 100,
     ref: transactionId,
-    callback: function (response) {
+    callback: (response) => {
       handlePayment(response.reference, "payment");
     }
   });
