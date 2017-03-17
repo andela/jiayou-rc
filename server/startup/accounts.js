@@ -32,7 +32,7 @@ export default function () {
       const userEmail = _.filter(attempt.user.emails, function (email) {
         return email.address === loginEmail;
       });
-
+/* eslint-disable no-undef */
       // check if the email is verified
       if (!userEmail.length || !userEmail[0].verified) {
         throw new Meteor.Error("403", "Oops! Please validate your email first.");

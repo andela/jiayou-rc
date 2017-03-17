@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import * as Collections from "/lib/collections";
 import * as Schemas from "/lib/collections/schemas";
 import { Logger, Reaction } from "/server/api";
