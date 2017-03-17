@@ -127,58 +127,56 @@ export default function () {
       // if we don't have user.services we're an anonymous user
       if (!user.services) {
         roles[shopId] = shop.defaultVisitorRole || defaultVisitorRole;
+      } else if (isVendor) {
+        roles[shopId] = vendorRoles;
       } else {
-        if (isVendor) {
-          roles[shopId] = vendorRoles;
-        } else {
-          roles[shopId] = shop.defaultRoles || defaultRoles;
+        roles[shopId] = shop.defaultRoles || defaultRoles;
+      }
+      // also add services with email defined to user.emails[]
+      for (const service in user.services) {
+        if (user.services[service].email) {
+          const email = {
+            provides: "default",
+            address: user.services[service].email,
+            verified: true
+          };
+          user.emails.push(email);
         }
-        // also add services with email defined to user.emails[]
-        for (const service in user.services) {
-          if (user.services[service].email) {
-            const email = {
-              provides: "default",
-              address: user.services[service].email,
-              verified: true
-            };
-            user.emails.push(email);
-          }
-          if (user.services[service].name) {
-            user.username = user.services[service].name;
-            additionals.profile.name = user.services[service].name;
-          }
-          // TODO: For now we have here instagram, twitter and google avatar cases
-          // need to make complete list
-          if (user.services[service].picture) {
-            additionals.profile.picture = user.services[service].picture;
-          } else if (user.services[service].profile_image_url_https) {
-            additionals.profile.picture = user.services[service].
+        if (user.services[service].name) {
+          user.username = user.services[service].name;
+          additionals.profile.name = user.services[service].name;
+        }
+        // TODO: For now we have here instagram, twitter and google avatar cases
+        // need to make complete list
+        if (user.services[service].picture) {
+          additionals.profile.picture = user.services[service].picture;
+        } else if (user.services[service].profile_image_url_https) {
+          additionals.profile.picture = user.services[service].
             dprofile_image_url_https;
-          } else if (user.services[service].profile_picture) {
-            additionals.profile.picture = user.services[service].profile_picture;
-          }
+        } else if (user.services[service].profile_picture) {
+          additionals.profile.picture = user.services[service].profile_picture;
         }
       }
-      // clone before adding roles
-      const account = Object.assign({}, user, additionals);
-      account.userId = user._id;
-      Collections.Accounts.insert(account);
-
-      // send a welcome email to new users,
-      // but skip the first default admin user
-      // (default admins already get a verification email)
-      if (!(Meteor.users.find().count() === 0)) {
-        Meteor.call("accounts/sendWelcomeEmail", shopId, user._id);
-      }
-
-      // assign default user roles
-      user.roles = roles;
-
-      // run onCreateUser hooks
-      // (the user object must be returned by all callbacks)
-      const userDoc = Hooks.Events.run("onCreateUser", user, options);
-      return userDoc;
     }
+    // clone before adding roles
+    const account = Object.assign({}, user, additionals);
+    account.userId = user._id;
+    Collections.Accounts.insert(account);
+
+    // send a welcome email to new users,
+    // but skip the first default admin user
+    // (default admins already get a verification email)
+    if (!(Meteor.users.find().count() === 0)) {
+      Meteor.call("accounts/sendWelcomeEmail", shopId, user._id);
+    }
+
+    // assign default user roles
+    user.roles = roles;
+
+    // run onCreateUser hooks
+    // (the user object must be returned by all callbacks)
+    const userDoc = Hooks.Events.run("onCreateUser", user, options);
+    return userDoc;
   });
 
   /**
