@@ -44,4 +44,3 @@ deployment:
       - docker push reactioncommerce/base:latest
       - docker push reactioncommerce/reaction:$CIRCLE_BUILD_NUM
       - docker push reactioncommerce/reaction:latest
-      
