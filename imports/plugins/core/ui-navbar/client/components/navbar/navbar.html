@@ -5,8 +5,20 @@
     <div class="menu">
       {{> tagNav tagNavProps}}
     </div>
+   
+    <script type="text/javascript">
+    $(document).ready(function() {
+      welcome.init()
+    });</script>
+  
+    <div onclick="welcome.start()">
+      <a href="{{pathFor '/reaction/dashboard'}}"><i class="help fa fa-bus fa-1x" id="welcome"></i></a>
+    </div>
+    <div class="search" >{{> React IconButtonComponent}}</div>
+    <div class="languages hidden-xs" id="lang">{{> i18nChooser}}</div>
     <div class="accounts">{{> accounts tpl="loginDropdown"}}</div>
     <div class="cart">{{> cartIcon}}</div>
     <div class="cart-alert">{{> cartPanel}}</div>
+
   </div>
 </template>

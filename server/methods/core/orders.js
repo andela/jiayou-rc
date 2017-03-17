@@ -329,7 +329,7 @@ Meteor.methods({
     const shoppersPhone = order.billing[0].address.phone;
     Logger.info("CUSTOMER ORDER DETAILS", order.items);
     Logger.info("CUSTOMER'S EMAIL", order.email);
-    Logger.info("CUSTOMERS PHONE NO " + shoppersPhone);
+    Logger.info("CUSTOMERS PHONE NUMBER " + shoppersPhone);
 
     let vendorPhones = [];
     const smsContent = {
