@@ -127,8 +127,8 @@ export default function () {
       // if we don't have user.services we're an anonymous user
       if (!user.services) {
         roles[shopId] = shop.defaultVisitorRole || defaultVisitorRole;
-      } else {
-        if (isVendor) {
+      } 
+        else if (isVendor) {
           roles[shopId] = vendorRoles;
         } else {
           roles[shopId] = shop.defaultRoles || defaultRoles;
@@ -177,8 +177,7 @@ export default function () {
       // run onCreateUser hooks
       // (the user object must be returned by all callbacks)
       const userDoc = Hooks.Events.run("onCreateUser", user, options);
-      return userDoc;
-    }
+      return userDoc;    
   });
 
   /**
