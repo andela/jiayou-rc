@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+/* global undef */
 import { LoginFormSharedHelpers } from "/client/modules/accounts/helpers";
 import { Template } from "meteor/templating";
 /**
@@ -53,9 +53,9 @@ Template.loginFormSignUpView.events({
     }
     let vendorDetails = {};
     if (Session.get("signupas") === "vendor") {
-      shopName = template.$(".shop-name").val().trim();
-      shopPhone = template.$(".shop-phone").val().trim();
-      shopAddress = template.$(".shop-address").val().trim();
+      const shopName = template.$(".shop-name").val().trim();
+      const shopPhone = template.$(".shop-phone").val().trim();
+      const shopAddress = template.$(".shop-address").val().trim();
 
       const validatedShopName = LoginFormValidation.shopName(shopName);
       const validatedShopPhone = LoginFormValidation.shopPhone(shopPhone);
