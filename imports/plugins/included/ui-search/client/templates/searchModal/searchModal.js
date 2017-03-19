@@ -58,6 +58,14 @@ Template.searchModal.onCreated(function () {
     });
   };
 
+  filterBrand = (products, query) => {
+    return _.filter(products, (product) => {
+      if (product.vendor === query) {
+        return product;
+      }
+    });
+  };
+
   this.autorun(() => {
     const searchCollection = this.state.get("searchCollection") || "products";
     const searchQuery = this.state.get("searchQuery");
@@ -197,7 +205,7 @@ Template.searchModal.events({
 
     templateInstance.state.set("facets", facets);
   },
-   // productSearchSort function
+   // productSearch Sort function
   "change [data-event-action=sort]": (event, templateInstance) => {
     const searchResult = templateInstance.state.get("productSearchResults");
     const sortValue = templateInstance.find("#selectSort").value.split("_");
@@ -209,6 +217,12 @@ Template.searchModal.events({
     const searchResult = templateInstance.state.get("productSearchResults");
     const filterValue = templateInstance.find("#priceFilter").value.split("_");
     const newFilterValue = filterPrice(searchResult, filterValue);
+    templateInstance.state.set("productSearchResults", newFilterValue);
+  },
+  "change #brandFilter": (event, templateInstance) => {
+    const searchResult = templateInstance.state.get("productSearchResults");
+    const filterValue = templateInstance.find("#brandFilter").value;
+    const newFilterValue = filterBrand(searchResult, filterValue);
     templateInstance.state.set("productSearchResults", newFilterValue);
   },
   "click [data-event-action=productClick]": function () {
