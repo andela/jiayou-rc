@@ -1,5 +1,5 @@
 import _ from "lodash";
-import __ from "underscore";
+import pluck from "lodash.pluck";
 import React from "react";
 import { DataType } from "react-taco-table";
 import { Template } from "meteor/templating";
@@ -43,7 +43,6 @@ Template.searchModal.onCreated(function () {
       });
     }
   });
-
   filterPrice = (products, query) => {
     return _.filter(products, (product) => {
       if (product.price) {
@@ -170,11 +169,12 @@ Template.searchModal.helpers({
   showSearchResults() {
     return false;
   },
+  // Get vendor
   getBrands() {
     const instance = Template.instance();
     const result = instance.state.get("productSearchResults");
-    const brand = __.pluck(result, ["vendor"]);
-    return __.uniq(brand) || [];
+    const brand = pluck(result, ["vendor"]);
+    return _.uniq(brand) || [];
   }
 });
 
@@ -205,21 +205,22 @@ Template.searchModal.events({
 
     templateInstance.state.set("facets", facets);
   },
-   // productSearch Sort function
-  "change [data-event-action=sort]": (event, templateInstance) => {
+   // Sort productSearch
+  "change [data-event-action=sort]": function (event, templateInstance) {
     const searchResult = templateInstance.state.get("productSearchResults");
     const sortValue = templateInstance.find("#selectSort").value.split("_");
     const orderedSort = _.orderBy(searchResult, [sortValue[0]], [sortValue[1]]);
     templateInstance.state.set("productSearchResults", orderedSort);
   },
-    // productSearchFilter function
-  "change #priceFilter": (event, templateInstance) => {
+    // Price Filter
+  "change #priceFilter": function (event, templateInstance) {
     const searchResult = templateInstance.state.get("productSearchResults");
     const filterValue = templateInstance.find("#priceFilter").value.split("_");
     const newFilterValue = filterPrice(searchResult, filterValue);
     templateInstance.state.set("productSearchResults", newFilterValue);
   },
-  "change #brandFilter": (event, templateInstance) => {
+   // Brand Filter
+  "change #brandFilter": function (event, templateInstance) {
     const searchResult = templateInstance.state.get("productSearchResults");
     const filterValue = templateInstance.find("#brandFilter").value;
     const newFilterValue = filterBrand(searchResult, filterValue);
