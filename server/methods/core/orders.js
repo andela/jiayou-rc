@@ -507,24 +507,21 @@ Meteor.methods({
 
   "send/smsAlert": function (smsContent) {
     check(smsContent, Object);
-    const apiKey = Meteor.settings.SMS.APIKEY;
-    const apiToken = Meteor.settings.SMS.APITOKEN;
-    const smsPhone = Meteor.settings.SMS.SENDER;
-    const phone = smsContent.to;
+    const { APIKEY, APITOKEN, SENDER } = Meteor.settings.SMS;
+    const recipientPhoneNo = smsContent.to;
     const message =  smsContent.message;
     const nexmo = new Nexmo({
-      apiKey,
-      apiSecret: apiToken
+      apiKey: APIKEY,
+      apiSecret: APITOKEN
     });
-    nexmo.message.sendSms(smsPhone, phone, message, {}, (err, res) => {
+    nexmo.message.sendSms(SENDER, recipientPhoneNo, message, {}, (err, res) => {
       if (err) {
         return Logger.error(err);
-      } else {
-        Logger.info(res);
-        Logger.info("Your New order has been successfully received and is been processed");
-        Logger.info(smsPhone);
-        Logger.info(phone);
       }
+      Logger.info(res);
+      Logger.info("Your New order has been successfully received and is been processed");
+      Logger.info(SENDER);
+      Logger.info(recipientPhoneNo);
     });
   },
 
