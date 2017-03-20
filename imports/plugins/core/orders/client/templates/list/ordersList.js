@@ -38,6 +38,6 @@ Template.dashboardOrdersList.helpers({
     return shop !== null ? shop.name : void 0;
   },
   hasComment() {
-    return this.comments !== "Select one";
+    return this.comment !== "Select one";
   }
 });

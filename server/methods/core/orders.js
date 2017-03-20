@@ -217,13 +217,17 @@ Meteor.methods({
    * @param {Object} order - order object
    * @return {Object} return results of several operations
    */
-  "orders/cancelOrder"(order) {
+  "orders/cancelOrder"(order, newComment) {
     check(order, Object);
+    check(newComment, Object);
 
     // Update Order
     return Orders.update(order._id, {
       $set: {
         "workflow.status": "canceled"
+      },
+      $push: {
+        comments: newComment
       },
       $addToSet: {
         "workflow.workflow": "coreOrderWorkflow/canceled"

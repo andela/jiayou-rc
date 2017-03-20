@@ -59,6 +59,15 @@ Template.ordersListSummary.events({
     const state = instance.state;
     const order = state.get("order");
 
+    const commentText = instance.$(".input-comment");
+    const comment = commentText.val().trim();
+
+    const newComment = {
+      body: comment,
+      userId: Meteor.userId(),
+      updatedAt: new Date
+    };
+
     swal({
       title: "Please confirm your action?",
       text: "You are about to cancel the order you just placed!",
@@ -69,7 +78,7 @@ Template.ordersListSummary.events({
       cancelButtonText: "No"
     })
     .then(() => {
-      Meteor.call("orders/cancelOrder", order, (error) => {
+      Meteor.call("orders/cancelOrder", order, newComment, (error) => {
         if (error) {
           Logger.warn(error);
         }
