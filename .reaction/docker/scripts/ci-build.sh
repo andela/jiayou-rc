@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # if we're not on a deployment branch, skip the Docker build/test
-if [[ "$CIRCLE_BRANCH" != "master" && "$CIRCLE_BRANCH" != "development" ]]; then
+if [[ "$CIRCLE_BRANCH" != "master" && "$CIRCLE_BRANCH" != "development" &&
+      "$CIRCLE_BRANCH" != "feature/140676755/setup-deployment-pipeline"]]; then
   echo "Not running a deployment branch. Skipping the Docker build test."
   exit 0
 fi
