@@ -1,5 +1,4 @@
 import _ from "lodash";
-import pluck from "lodash.pluck";
 import React from "react";
 import { DataType } from "react-taco-table";
 import { Template } from "meteor/templating";
@@ -173,7 +172,7 @@ Template.searchModal.helpers({
   getBrands() {
     const instance = Template.instance();
     const result = instance.state.get("productSearchResults");
-    const brand = pluck(result, ["vendor"]);
+    const brand = _.map(result, "vendor");
     return _.uniq(brand) || [];
   }
 });
