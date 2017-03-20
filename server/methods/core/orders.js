@@ -215,10 +215,30 @@ Meteor.methods({
    * order/cancelOrder
    * @summary Adds the cancel order feature
    * @param {Object} order - order object
+   * @return {Object} return results of several operations
+   */
+  "orders/cancelOrder"(order) {
+    check(order, Object);
+
+    // Update Order
+    return Orders.update(order._id, {
+      $set: {
+        "workflow.status": "canceled"
+      },
+      $addToSet: {
+        "workflow.workflow": "coreOrderWorkflow/canceled"
+      }
+    });
+  },
+
+    /**
+   * order/cancelOrders
+   * @summary Adds the cancel order feature
+   * @param {Object} order - order object
    * @param {Object} newComment - newComment object
    * @return {Object} return results of several operations
    */
-  "orders/cancelOrder"(order, newComment) {
+  "orders/cancelOrders"(order, newComment) {
     check(order, Object);
     check(newComment, Object);
 
@@ -238,6 +258,7 @@ Meteor.methods({
       }
     });
   },
+
 
   /**
    * orders/shipmentShipped

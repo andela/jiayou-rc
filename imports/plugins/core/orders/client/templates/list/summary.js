@@ -1,6 +1,6 @@
 import { Template } from "meteor/templating";
 import { NumericInput } from "/imports/plugins/core/ui/client/components";
-import { Textfield } from "/imports/plugins/core/ui/client/components";
+import { Logger } from "/client/api";
 
 Template.ordersListSummary.onCreated(function () {
   this.state = new ReactiveDict();
@@ -35,22 +35,11 @@ Template.ordersListSummary.helpers({
 
   displayCancelButton() {
     return !(this.order.workflow.status === "canceled"
-      || this.order.workflow.status === "coreOrderWorkflow/canceled");
+      || this.order.workflow.status === "coreOrderWorkflow/completed");
   },
 
   orderStatus() {
     return this.order.workflow.status === "canceled";
-  },
-
-  render() {
-    return (
-      <Textfield
-        i18nKeyLabel={"translation.i18n.key"}
-        label="Name"
-        onChange={this.handleChange}
-        value={this.state.value}
-      />
-    );
   }
 });
 
@@ -82,7 +71,7 @@ Template.ordersListSummary.events({
     .then(() => {
       Meteor.call("orders/cancelOrder", order, (error) => {
         if (error) {
-          swal("Order cancellation unsuccessful.", "success");
+          Logger.warn(error);
         }
       });
     });

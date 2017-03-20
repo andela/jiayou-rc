@@ -79,7 +79,7 @@ Template.coreOrderCancelOrder.events({
       confirmButtonText: "Yes"
     }, (confirmed) => {
       if (confirmed) {
-        Meteor.call("orders/cancelOrder", order, newComment, (error) => {
+        Meteor.call("orders/cancelOrders", order, newComment, (error) => {
           if (!error) {
             template.showCancelOrderForm.set(false);
           }
