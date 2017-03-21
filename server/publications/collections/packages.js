@@ -32,13 +32,12 @@ Meteor.publish("Packages", function (shopCursor) {
       shopId: shop._id
     }, {
       fields: {
-        "shopId": 1,
-        "name": 1,
-        "enabled": 1,
-        "registry": 1,
-        "layout": 1,
-        "settings.general.enabled": 1,
-        "settings.public": 1
+        shopId: 1,
+        name: 1,
+        enabled: 1,
+        registry: 1,
+        layout: 1,
+        settings: 1
       }
     });
   }
