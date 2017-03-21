@@ -13,9 +13,9 @@ Reaction.registerPackage({
     provides: "dashboard",
     workflow: "corePagesWorkFlow",
     name: "staticPages",
-    label: "Static Pages",
+    label: "Manage Static Pages",
     description: "Create and manage static pages",
-    icon: "fa fa-copy",
+    icon: "fa fa-paperclip",
     priority: 1,
     container: "core",
     template: "staticPages"

@@ -20,7 +20,7 @@ Template.staticPages.onRendered(function () {
       .attr("id", "static-pages-submit")
       .attr("title", "Create")
       .attr("tabindex", "-1")
-      .addClass("fa fa-floppy-o static-pages-new")
+      .addClass("fa fa-file-text static-pages-new")
   );
 });
 Template.staticPages.onDestroyed(()=>{
