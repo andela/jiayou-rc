@@ -70,7 +70,7 @@ Template.staticPages.events({
   "click #static-pages-menu-toggle": (event)=> {
     event.preventDefault();
     $("#static-pages-wrapper").toggleClass("active");
-    $("#static-pages-menu-toggle > i").toggleClass("fa-toggle-on fa-toggle-off");
+    $("#static-pages-menu-toggle > i").toggleClass("fa-caret-square-o-left fa-caret-square-o-right");
     $("#static-pages-menu-toggle").toggleClass("static-pages-menu-adjust");
   },
   "click .editPage": (event)=> {
