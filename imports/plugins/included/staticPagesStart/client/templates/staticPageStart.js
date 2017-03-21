@@ -7,7 +7,7 @@ import "/node_modules/simplemde/dist/simplemde.min.css";
 import { Reaction } from "/client/api";
 
 let simplemde;
-Template.staticPages.onRendered(function () {
+Template.staticPages.onRendered(() => {
   $("#main").css("overflow", "visible");
 
   simplemde = new SimpleMDE({
@@ -23,7 +23,7 @@ Template.staticPages.onRendered(function () {
       .addClass("fa fa-file-text static-pages-new")
   );
 });
-Template.staticPages.onDestroyed(()=>{
+Template.staticPages.onDestroyed(() => {
   $("#main").css("overflow", "auto");
 });
 
@@ -37,7 +37,7 @@ Template.staticPages.helpers({
 });
 
 Template.staticPages.events({
-  "click .static-pages-new": ()=> {
+  "click .static-pages-new": () => {
     const title = $("#static-page-title").val();
     const slug = $("#static-page-slug").val();
     const shopId = Reaction.shopId;
@@ -52,14 +52,14 @@ Template.staticPages.events({
       }
     });
   },
-  "click .static-pages-update": ()=> {
+  "click .static-pages-update": () => {
     const _id = $("#static-page-id").val();
     const title = $("#static-page-title").val();
     const slug = $("#static-page-slug").val();
     const shopId = Reaction.shopId;
     const content = simplemde.value();
 
-    Meteor.call("updatePage", _id, title, slug, content, shopId,  function (err) {
+    Meteor.call("updatePage", _id, title, slug, content, shopId,  (err) => {
       if (err) {
         Alerts.toast(err.message, "error");
       } else {
@@ -67,13 +67,13 @@ Template.staticPages.events({
       }
     });
   },
-  "click #static-pages-menu-toggle": (event)=> {
+  "click #static-pages-menu-toggle": (event) => {
     event.preventDefault();
     $("#static-pages-wrapper").toggleClass("active");
     $("#static-pages-menu-toggle > i").toggleClass("fa-caret-square-o-left fa-caret-square-o-right");
     $("#static-pages-menu-toggle").toggleClass("static-pages-menu-adjust");
   },
-  "click .editPage": (event)=> {
+  "click .editPage": (event) => {
     const _id = $(event.currentTarget).parents("tr").attr("id");
     const pageDetails = StaticPages.find({_id}).fetch();
     $("#static-page-title").val(pageDetails[0].title);
@@ -84,7 +84,7 @@ Template.staticPages.events({
     .addClass("static-pages-update")
     .prop("title", "Update");
   },
-  "click .deletePage": (event)=> {
+  "click .deletePage": (event) => {
     Alerts.alert({
       title: "Delete this page?",
       showCancelButton: true,
@@ -97,7 +97,7 @@ Template.staticPages.events({
       }
     });
   },
-  "click .addPage": ()=> {
+  "click .addPage": () => {
     $("#static-page-title").val("").focus();
     $("#static-page-slug").val("");
     simplemde.value("");
