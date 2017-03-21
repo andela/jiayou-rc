@@ -22,18 +22,20 @@ Template.wallet.onCreated(function bodyOnCreated() {
 });
 const getPaystackSettings = () => {
   const settings = Packages.findOne({
-    name: "paystack-payment",
+    name: "paystack-paymentmethod",
     shopId: Reaction.getShopId()
   });
   return settings;
 };
 
 const finalizeDeposit = (paystackMethod) => {
+  paystackMethod.transactions.amount = paystackMethod.amount;
   Meteor.call("wallet/transaction", Meteor.userId(), paystackMethod.transactions, (err, res) => {
     if (res) {
       document.getElementById("depositAmount").value = "";
       Alerts.toast("Your deposit was successful", "success");
     } else {
+      console.log(err, res);
       Alerts.toast("An error occured, please try again", "error");
     }
   });
@@ -50,7 +52,7 @@ function handlePayment(result) {
   const paystackConfig = getPaystackSettings();
   HTTP.call("GET", `https://api.paystack.co/transaction/verify/${transactionId}`, {
     headers: {
-      Authorization: `Bearer ${paystackConfig.settings.secretKey}`
+      Authorization: 'Bearer sk_test_f88f14c4ac8173ab3c470575b4245544ccc9162f'
     }
   }, function (error, response) {
     if (error) {
@@ -72,6 +74,7 @@ function handlePayment(result) {
         createdAt: new Date()
       };
       if (type === "deposit") {
+        console.log(paystackResponse.amount);
         paystackMethod.transactions = {
           amount: paystackResponse.amount / (100 * exchangeRate),
           referenceId: paystackResponse.reference,
@@ -86,9 +89,11 @@ function handlePayment(result) {
 
 // Paystack payment
 const payWithPaystack = (email, amount) => {
+  console.log(email, amount);
   const paystackConfig = getPaystackSettings();
+  console.log(paystackConfig);
   const handler = PaystackPop.setup({
-    key: paystackConfig.settings.publicKey,
+    key: 'pk_test_a423d4b80be23a5d10d3d667361e288a79addf61',
     email: email,
     amount: amount * 100,
     callback: handlePayment
@@ -138,6 +143,7 @@ Template.wallet.events({
     }
     try {
       const amount = parseInt(document.getElementById("depositAmount").value, 10);
+      console.log("here!!!!!___", amount);
       if (amount > 100000) {
         Alerts.toast("You can only deposit ₦100,000 per transaction", "error");
       } else {
