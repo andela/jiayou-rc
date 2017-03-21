@@ -2,7 +2,7 @@
 import SimpleMDE from "simplemde";
 import { Template } from "meteor/templating";
 import { StaticPages } from "/lib/collections";
-import "./static-pages-creator.html";
+import "./staticPageStart.html";
 import "/node_modules/simplemde/dist/simplemde.min.css";
 import { Reaction } from "/client/api";
 
