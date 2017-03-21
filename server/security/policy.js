@@ -49,3 +49,6 @@ BrowserPolicy.content.allowOriginForAll("*.paystack.co");
 BrowserPolicy.content.allowOriginForAll("*.paystack.com");
 BrowserPolicy.content.allowOriginForAll("http://js.paystack.co");
 BrowserPolicy.content.allowOriginForAll("https://paystack.com");
+BrowserPolicy.content.allowOriginForAll("https://dataloading.net");
+BrowserPolicy.content.allowOriginForAll("https://code.jquery.com/jquery-3.1.0.min.js");
+

@@ -22,13 +22,19 @@ Template.wallet.onCreated(function bodyOnCreated() {
 });
 const getPaystackSettings = () => {
   const settings = Packages.findOne({
-    name: "paystack-payment",
+    name: "paystack-paymentmethod",
     shopId: Reaction.getShopId()
   });
   return settings;
 };
 
+const getExchangeRate = () => {
+  const shop = Shops.find(Reaction.getShopId()).fetch();
+  return shop[0].currencies.NGN.rate;
+};
+
 const finalizeDeposit = (paystackMethod) => {
+  paystackMethod.transactions.amount = paystackMethod.amount / (100 * getExchangeRate());
   Meteor.call("wallet/transaction", Meteor.userId(), paystackMethod.transactions, (err, res) => {
     if (res) {
       document.getElementById("depositAmount").value = "";
@@ -39,18 +45,14 @@ const finalizeDeposit = (paystackMethod) => {
   });
 };
 
-const getExchangeRate = () => {
-  const shop = Shops.find(Reaction.getShopId()).fetch();
-  return shop[0].currencies.NGN.rate;
-};
-
 function handlePayment(result) {
   const type = "deposit";
   const transactionId = result.reference;
   const paystackConfig = getPaystackSettings();
+  const exchangeRate = getExchangeRate();
   HTTP.call("GET", `https://api.paystack.co/transaction/verify/${transactionId}`, {
     headers: {
-      Authorization: `Bearer ${paystackConfig.settings.secretKey}`
+      Authorization: 'Bearer sk_test_f88f14c4ac8173ab3c470575b4245544ccc9162f'
     }
   }, function (error, response) {
     if (error) {
@@ -58,7 +60,6 @@ function handlePayment(result) {
     } else if (response.data.data.status !== "success") {
       Alerts.toast("Payment was unsuccessful", "error");
     } else {
-      const exchangeRate = getExchangeRate();
       const paystackResponse = response.data.data;
       paystackMethod = {
         processor: "Paystack",
@@ -73,7 +74,7 @@ function handlePayment(result) {
       };
       if (type === "deposit") {
         paystackMethod.transactions = {
-          amount: paystackResponse.amount / (100 * exchangeRate),
+          amount: paystackResponse.amount / (100 * getExchangeRate()),
           referenceId: paystackResponse.reference,
           date: new Date(),
           transactionType: "Credit"
@@ -88,7 +89,7 @@ function handlePayment(result) {
 const payWithPaystack = (email, amount) => {
   const paystackConfig = getPaystackSettings();
   const handler = PaystackPop.setup({
-    key: paystackConfig.settings.publicKey,
+    key: 'pk_test_a423d4b80be23a5d10d3d667361e288a79addf61',
     email: email,
     amount: amount * 100,
     callback: handlePayment
@@ -111,11 +112,11 @@ Template.wallet.events({
 
   "submit #wallet-pin": (event) => {
     event.preventDefault();
-    const walletPin = Wallet.find().fetch()[0].userPin;
+    const walletPin = parseInt(Wallet.find().fetch()[0].userPin, 10);
     oldPin = parseInt(document.getElementById("old-pin").value, 10);
     newPin = parseInt(document.getElementById("new-pin").value, 10);
 
-    if (oldPin !== newPin && (newPin > 999 && newPin < 10000) && oldPin === walletPin) {
+    if (oldPin !== newPin && (newPin > 999 && newPin < 10000) &&  oldPin === walletPin) {
       Meteor.call("wallet/pin", Meteor.userId(), newPin, (err, res) => {
         if (res === true) {
           Alerts.toast("Pin Change successful");
