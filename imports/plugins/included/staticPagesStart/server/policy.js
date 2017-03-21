@@ -5,3 +5,5 @@ import { BrowserPolicy } from "meteor/browser-policy-common";
 BrowserPolicy.content.allowOriginForAll("*.facebook.com");
 BrowserPolicy.content.allowOriginForAll("*.reactioncommerce.com");
 BrowserPolicy.content.allowOriginForAll("*.maxcdn.bootstrapcdn.com");
+BrowserPolicy.content.allowOriginForAll("*.maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css");
+
