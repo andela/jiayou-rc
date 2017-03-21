@@ -23,7 +23,7 @@ Reaction.registerPackage({
   layout: [{
     layout: "coreLayout",
     workflow: "corePagesWorkFlow",
-    collection: "Orders",
+    collection: "StaticPages",
     theme: "default",
     enabled: true,
     structure: {
