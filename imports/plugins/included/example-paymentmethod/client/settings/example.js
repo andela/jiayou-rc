@@ -10,7 +10,7 @@ Template.exampleSettings.helpers({
   ExamplePackageConfig() {
     return ExamplePackageConfig;
   },
-  packageData() { 
+  packageData() {
     return Packages.findOne({
       name: "example-paymentmethod",
       shopId: Reaction.getShopId()
