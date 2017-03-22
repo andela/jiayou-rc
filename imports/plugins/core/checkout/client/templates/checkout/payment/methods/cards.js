@@ -1,9 +1,8 @@
-import { Packages, Shops, Wallets, Cart } from "/lib/collections";
+import { Packages, Shops, Wallet, Cart } from "/lib/collections";
 import { Template } from "meteor/templating";
 import { Meteor } from "meteor/meteor";
 import Alert from "sweetalert2";
 import bcrypt from "bcrypt-nodejs";
-
 
 const openClassName = "in";
 
@@ -51,7 +50,7 @@ Template.payWithWallet.onCreated(function bodyOnCreated() {
   this.state.set("details", { balance: 0 });
   this.autorun(() => {
     this.subscribe("transactionInfo", Meteor.userId());
-    const transactionDetail = Wallets.find().fetch();
+    const transactionDetail = Wallet.find().fetch();
     this.state.set("details", transactionDetail[0]);
   });
 });
@@ -62,7 +61,7 @@ Template.payWithWallet.events({
     const cartAmounts = parseFloat(Cart.findOne({userId: Meteor.userId()}).cartTotal(), 10);
     const pin = parseInt(document.getElementById("walletpin").value, 10);
     const convertedPin = pin.toString();
-    const walletPin = Wallets.find().fetch()[0].userPin;
+    const walletPin = Wallet.find().fetch()[0].userPin;
     const comparePin = bcrypt.compareSync(convertedPin, walletPin);
 
     if (comparePin) {
