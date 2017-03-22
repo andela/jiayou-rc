@@ -22,6 +22,10 @@ Template.loginFormSignUpView.onRendered(function () {
  * Events: Login form sign up view
  */
 Template.loginFormSignUpView.events({
+  "click #is-vendor": (event) => {
+    const isVendor = event.target.value;
+    Session.set("isVendor", isVendor);
+  },
   /**
    * Submit sign up form
    * @param  {Event} event - jQuery Event
@@ -30,9 +34,14 @@ Template.loginFormSignUpView.events({
    */
   "submit form": function (event, template) {
     event.preventDefault();
+    let isVendor;
     const usernameInput = template.$(".login-input-username");
     const emailInput = template.$(".login-input-email");
     const passwordInput = template.$(".login-input-password");
+    isVendor = Session.get("isVendor");
+    if (isVendor === "asVendor") {
+      isVendor = true;
+    }
     const username = usernameInput.val().trim();
     const email = emailInput.val().trim();
     const password = passwordInput.val().trim();
@@ -75,11 +84,12 @@ Template.loginFormSignUpView.events({
           shopName: shopName,
           shopPhone: shopPhone,
           shopAddress: shopAddress,
-          isVendor: true,
-          shopActive: false
+          shopActive: false,
+          isVendor: isVendor
         }]
       };
     }
+
     if ($.isEmptyObject(errors) === false) {
       templateInstance.formMessages.set({
         errors: errors
@@ -91,8 +101,10 @@ Template.loginFormSignUpView.events({
       username: username,
       email: email,
       password: password,
-      profile: vendorDetails
+      profile: vendorDetails,
+      isVendor: isVendor
     };
+
     Accounts.createUser(newUserData, function (error) {
       if (error) {
         // Show some error message

@@ -78,7 +78,6 @@ export default function () {
    * @see: http://docs.meteor.com/#/full/accounts_oncreateuser
    */
   Accounts.onCreateUser((options, user) => {
-    let isVendor = false;
     if (Object.keys(options.profile).length !== 0) {
       isVendor = (options.profile.vendorDetails[0].isVendor) ? options.profile.vendorDetails[0].isVendor : false;
     }
