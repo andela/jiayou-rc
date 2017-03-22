@@ -89,7 +89,6 @@ const payWithPaystack = (email, amount, transactionId) => {
 Template.paystackPaymentForm.events({
   "click #paywithpaystack": (event) => {
     event.preventDefault();
-    const payStackConfig = getPayStackSettings();
     const accountDetails = Accounts.find(Meteor.userId()).fetch();
     const userMail = accountDetails[0].emails[0].address;
     const amount = getOrderPrice();
