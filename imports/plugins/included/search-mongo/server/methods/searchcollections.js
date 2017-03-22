@@ -228,7 +228,7 @@ export function buildAccountSearchRecord(accountId) {
   check(accountId, String);
   const account = Accounts.findOne(accountId);
   // let's ignore anonymous accounts
-  if (account.emails.length) {
+  if (account.emails) {
     const accountSearch = {};
     for (const field of requiredFields.accounts) {
       if (transformations.accounts[field]) {

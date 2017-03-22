@@ -44,4 +44,3 @@ BrowserPolicy.framing.restrictToOrigin("localhost:3000");
 
 BrowserPolicy.content.allowOriginForAll("enginex.kadira.io");
 BrowserPolicy.content.allowOriginForAll("*.stripe.com");
-
