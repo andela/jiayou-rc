@@ -5,7 +5,10 @@ machine:
     - docker
   pre:
     - hash meteor 2>/dev/null || curl https://install.meteor.com | /bin/sh
+<<<<<<< 2b53f75003feafb7f1800dc581948bcc48bd2aba
     - npm install -g istanbul
+=======
+>>>>>>> Remove unnecessary files from PR
 
 dependencies:
   cache_directories:
@@ -26,7 +29,7 @@ test:
 
 deployment:
   prequel:
-    branch: develop
+    branch: development
     commands:
       - JIAYOU_RC_TRIGGER
   release:
