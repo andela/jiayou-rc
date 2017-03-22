@@ -69,8 +69,6 @@ Meteor.methods({
     }
 
     try {
-      console.log(userId);
-      console.log(transactions);
       Wallet.update({
         userId
       }, {
@@ -83,7 +81,6 @@ Meteor.methods({
       });
       return 1;
     } catch (error) {
-      console.log(error);
       return 0;
     }
   }
