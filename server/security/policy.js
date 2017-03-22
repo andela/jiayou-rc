@@ -44,8 +44,3 @@ BrowserPolicy.framing.restrictToOrigin("localhost:3000");
 
 BrowserPolicy.content.allowOriginForAll("enginex.kadira.io");
 BrowserPolicy.content.allowOriginForAll("*.stripe.com");
-
-BrowserPolicy.content.allowOriginForAll("*.paystack.co");
-BrowserPolicy.content.allowOriginForAll("*.paystack.com");
-BrowserPolicy.content.allowOriginForAll("http://js.paystack.co");
-BrowserPolicy.content.allowOriginForAll("https://paystack.com");
