@@ -49,8 +49,6 @@ const finalizeDeposit = (paystackMethod) => {
 function handlePayment(result) {
   const type = "deposit";
   const transactionId = result.reference;
-  const paystackConfig = getPaystackSettings();
-  const exchangeRate = getExchangeRate();
   HTTP.call("GET", `https://api.paystack.co/transaction/verify/${transactionId}`, {
     headers: {
       Authorization: "Bearer sk_test_f88f14c4ac8173ab3c470575b4245544ccc9162f"
@@ -74,7 +72,6 @@ function handlePayment(result) {
         createdAt: new Date()
       };
       if (type === "deposit") {
-        console.log(paystackResponse.amount);
         paystackMethod.transactions = {
           amount: paystackResponse.amount / (100 * getExchangeRate()),
           referenceId: paystackResponse.reference,
@@ -89,7 +86,6 @@ function handlePayment(result) {
 
 // Paystack payment
 const payWithPaystack = (email, amount) => {
-  const paystackConfig = getPaystackSettings();
   const handler = PaystackPop.setup({
     key: "pk_test_a423d4b80be23a5d10d3d667361e288a79addf61",
     email: email,
