@@ -3,11 +3,18 @@
   margin-top: 20px;
 }
 
-.overview {
+.data-container {
   margin-top: 10px;
   margin-left: 10px;
 }
 
-table {
+#data-table {
+  margin-top: 10px;
+  margin-left: 30px;
   width: 500px;
+}
+
+#overview-table {
+  width: 500px;
+  margin-left: 30px;
 }

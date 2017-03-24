@@ -1,15 +1,6 @@
-import _ from "lodash";
 import { Template } from "meteor/templating";
-import { Orders, Products, Accounts, Shops } from "/lib/collections";
-import { formatPriceString } from "/client/api";
+import { Orders, Accounts, Shops } from "/lib/collections";
 import { ReactiveDict } from "meteor/reactive-dict";
-
-// Function to get total sales recorded
-// console.log("hello", Products.find().fetch());
-Template.overview.onRendered(() => {
-
-});
-
 
 Template.overview.onCreated(function () {
   this.state = new ReactiveDict();
@@ -31,9 +22,8 @@ Template.overview.onCreated(function () {
         allSales += order.items.length;
         revenue += order.billing[0].invoice.total;
       });
-      console.log(Shops.find().fetch());
       self.state.set("allSales", allSales);
-      self.state.set("numberOfOrders", allOrders.length);
+      self.state.set("numberOfOrders", Orders.find().fetch().length);
       self.state.set("revenue", revenue);
       self.state.set("allUsers", Accounts.find().fetch().length);
       self.state.set("numOfShops", Shops.find().fetch().length);
