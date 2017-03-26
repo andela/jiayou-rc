@@ -12,9 +12,6 @@ const dateData = {
   }
 };
 
-// array to store all products IDs
-const allProductsIDs = [];
-
 Template.hotProducts.onCreated(function () {
   // initialize state
   this.state = new ReactiveDict();
@@ -64,7 +61,6 @@ Template.hotProducts.events({
       result.forEach((order) => {
         if (order.createdAt.getMonth() === dateData.monthsMapped[selectedMonth] &&
           order.createdAt.getFullYear() === parseInt(selectedYear, 10)) {
-          //
           order.items.forEach((item) => {
             // check if productID is not a key in the allOrders object
             if (!Object.keys(allOrders).includes(item.title)) {
@@ -99,7 +95,7 @@ Template.hotProducts.helpers({
     const ordersArray = [];
     const orders = Template.instance().state.get("allOrders");
     // We set a threshold of 5 sales or more to classify a product as 'hot'
-    for (key in orders) {
+    for (const key in orders) {
       if (orders[key][0] >= 5) {
         ordersArray.push({
           product: key,

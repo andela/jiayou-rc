@@ -1,0 +1,34 @@
+<template name="customers">
+  <div class="card data-container">
+    <h3>Here are your top 5 highest spending customers</h3>
+
+    <br>
+
+    <table class="table table-striped" id="data-table">
+      {{#if customers}}
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Amount Spent</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each customers}}
+        <tr>
+          <td>{{name}}</td>
+          <td>{{email}}</td>
+          <td>${{amount}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+      {{else}}
+      <thead>
+        <tr>
+          <th>No Data to display</th>
+        </tr>
+      </thead>
+      {{/if}}
+    </table>
+  </div>
+</template>
