@@ -28,22 +28,30 @@
 
     <!--Table to display the aggregate data of sales for a particular period-->
     <table class="table table-striped" id="data-table">
-        <thead>
-          <tr>
-            <th>Year</th>
-            <th>Month</th>
-            <th>Total Sales</th>
-            <th>Revenue</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="col-md-4">{{selectedYear}}</td>
-            <td class="col-md-4">{{selectedMonth}}</td>
-            <td class="col-md-4">{{totalSales}}</td>
-            <td class="col-md-4">{{revenue}}</td>
-          </tr>
-        </tbody>
-      </table>
+      {{#if totalSales}}
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>Month</th>
+          <th>Total Sales</th>
+          <th>Revenue</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-md-4">{{selectedYear}}</td>
+          <td class="col-md-4">{{selectedMonth}}</td>
+          <td class="col-md-4">{{totalSales}}</td>
+          <td class="col-md-4">{{revenue}}</td>
+        </tr>
+      </tbody>
+      {{else}}
+      <thead>
+        <tr>
+          <th>No Data to display</th>
+        </tr>
+      </thead>
+      {{/if}}
+    </table>
   </div>
 </template>

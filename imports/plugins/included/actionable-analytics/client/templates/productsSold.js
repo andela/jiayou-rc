@@ -16,10 +16,10 @@ Template.productsSold.onCreated(function () {
   // initialize state
   this.state = new ReactiveDict();
   this.state.setDefault({
-    selectedYear: "Select a year",
-    selectedMonth: "Select a month",
-    totalSales: "No data to display",
-    revenue: "No data to display"
+    selectedYear: null,
+    selectedMonth: null,
+    totalSales: null,
+    revenue: null
   });
 });
 
@@ -33,7 +33,7 @@ Template.productsSold.events({
     const selectedMonth = template.$("#month option:selected").text().trim();
 
     if (selectedYear === "Select Year" || selectedMonth === "Select Month") {
-      toastr.warning("Please select a time");
+      toastr.error("Please select a time");
     }
 
     Template.instance().state.set("selectedYear", selectedYear);

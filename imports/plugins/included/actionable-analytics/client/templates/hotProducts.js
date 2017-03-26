@@ -31,22 +31,10 @@ const getDates = (date) => {
   }
 };
 
-const populateAllProducts = (IDs) => {
-  IDs.forEach((id) => {
-    allProductsIDs.push(id);
-  });
-};
-
 Meteor.call("analytics/get-orders", (error, result) => {
   result.forEach((order) => {
     getDates(order.createdAt);
   });
-});
-
-
-// Get all products IDs
-Meteor.call("analytics/get-all-products-ids", (error, result) => {
-  populateAllProducts(result);
 });
 
 
@@ -58,28 +46,38 @@ Template.hotProducts.events({
     const selectedYear = template.$("#year option:selected").text().trim();
     const selectedMonth = template.$("#month option:selected").text().trim();
 
+    if (selectedYear === "Select Year" || selectedMonth === "Select Month") {
+      toastr.error("Please select a time");
+    }
+
+    Template.instance().state.set("selectedYear", selectedYear);
+    Template.instance().state.set("selectedMonth", selectedMonth);
+
     Meteor.call("analytics/get-orders", (error, result) => {
+
       /**
-     * This object contains information about all the quantity sold
-     * for each product in an order
-     */
+        * This object contains information about all the quantity sold
+        * for each product in an order
+       */
+
       const allOrders = {};
       result.forEach((order) => {
-        order.items.forEach((item) => {
-          // check if productID is not a key in the allOrders object
-          if (!Object.keys(allOrders).includes(item.title)) {
-            /**
-             * The first item in the array is the quantity sold
-             */
-            allOrders[item.title] = [0];
-          }
-          allOrders[item.title][0] += item.quantity;
-        });
+        if (order.createdAt.getMonth() === dateData.monthsMapped[selectedMonth] &&
+          order.createdAt.getFullYear() === parseInt(selectedYear, 10)) {
+          //
+          order.items.forEach((item) => {
+            // check if productID is not a key in the allOrders object
+            if (!Object.keys(allOrders).includes(item.title)) {
+              /**
+               * The first item in the array is the quantity sold
+               */
+              allOrders[item.title] = [0];
+            }
+            allOrders[item.title][0] += item.quantity;
+          });
+        }
       });
-      console.log("allOrders", allOrders);
       template.state.set("allOrders", allOrders);
-      template.state.set("product", Object.keys(allOrders));
-      template.state.set("quantity", Object.values(allOrders));
     });
   }
 });
