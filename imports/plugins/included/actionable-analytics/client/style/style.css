@@ -3,10 +3,10 @@
   margin-top: 20px;
 }
 
-.data-container {
+/*.data-container {
   margin-top: 10px;
   margin-left: 10px;
-}
+}*/
 
 #data-table {
   margin-top: 10px;
@@ -18,11 +18,11 @@
   margin-left: 30px;
 }
 
-#overview-table {
+/*#overview-table {
   width: 500px;
   margin-left: 30px;
-}
+}*/
 
 h3 {
-  margin-left: 10px;
+  margin-left: 20px;
 }

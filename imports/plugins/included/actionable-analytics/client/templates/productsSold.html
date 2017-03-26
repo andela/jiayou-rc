@@ -2,7 +2,7 @@
   <div class="card data-container">
     <h3>Get information about sales made for a particular period</h3>
     <br>
-    <form name="datePickerForm" class="form-inline" id="date-picker">
+    <form name="datePickerForm" class="form-inline" id="date-form">
       <div class="form-group">
         <label for="year">Year</label>
         <select class="form-control input-view" id="year" style="text-align-last: center;">
@@ -28,12 +28,13 @@
 
     <!--Table to display the aggregate data of sales for a particular period-->
     <table class="table table-striped" id="data-table">
-      {{#if totalSales}}
+      {{#if numOfOrders}}
       <thead>
         <tr>
           <th>Year</th>
           <th>Month</th>
-          <th>Total Sales</th>
+          <th>Number of Orders</th>
+          <th>Quantity Sold</th>
           <th>Revenue</th>
         </tr>
       </thead>
@@ -41,8 +42,9 @@
         <tr>
           <td class="col-md-4">{{selectedYear}}</td>
           <td class="col-md-4">{{selectedMonth}}</td>
-          <td class="col-md-4">{{totalSales}}</td>
-          <td class="col-md-4">{{revenue}}</td>
+          <td class="col-md-4">{{numOfOrders}}</td>
+          <td class="col-md-4">{{qtySold}}</td>
+          <td class="col-md-4">${{revenue}}</td>
         </tr>
       </tbody>
       {{else}}

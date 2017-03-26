@@ -24,7 +24,7 @@ Template.overview.onCreated(function () {
       });
       self.state.set("allSales", allSales);
       self.state.set("numberOfOrders", Orders.find().fetch().length);
-      self.state.set("revenue", revenue);
+      self.state.set("revenue", Math.round(revenue));
       self.state.set("allUsers", Accounts.find().fetch().length);
       self.state.set("numOfShops", Shops.find().fetch().length);
     }

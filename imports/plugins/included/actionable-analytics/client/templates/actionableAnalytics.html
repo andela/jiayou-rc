@@ -6,7 +6,6 @@
       <li><a data-toggle="tab" href="#hotProductsMenu">Hot Products</a></li>
       <li><a data-toggle="tab" href="#customersMenu">Customers</a></li>
       <li><a  data-toggle="tab" href="#ordersMenu">Orders</a></li>
-      <li><a data-toggle="tab" href="#salesMenu">Product Views/Sales</a></li>
     </ul>
 
     <div class="tab-content">
@@ -23,10 +22,7 @@
         {{> customers }}
       </div>
       <div id="ordersMenu" class="tab-pane fade">
-        Orders
-      </div>
-      <div id="salesMenu" class="tab-pane fade">
-        Views/Sales
+        {{> orders}}
       </div>
     </div>
   </div>

@@ -18,8 +18,9 @@ Template.productsSold.onCreated(function () {
   this.state.setDefault({
     selectedYear: null,
     selectedMonth: null,
-    totalSales: null,
-    revenue: null
+    numOfOrders: null,
+    revenue: null,
+    qtySold: null
   });
 });
 
@@ -43,15 +44,18 @@ Template.productsSold.events({
       // get orders for the specified month and year
       const filteredOrders = [];
       let revenue = 0;
+      let qtySold = 0;
       result.forEach((order) => {
         if (order.createdAt.getMonth() === dateData.monthsMapped[selectedMonth] &&
           order.createdAt.getFullYear() === parseInt(selectedYear, 10)) {
           filteredOrders.push(order);
           revenue += order.billing[0].invoice.total;
+          qtySold += order.items.length;
         }
       });
-      template.state.set("totalSales", filteredOrders.length);
-      template.state.set("revenue", revenue);
+      template.state.set("qtySold", qtySold);
+      template.state.set("numOfOrders", filteredOrders.length);
+      template.state.set("revenue", Math.round(revenue));
     });
   }
 });
@@ -81,10 +85,13 @@ Template.productsSold.helpers({
   selectedMonth() {
     return Template.instance().state.get("selectedMonth");
   },
-  totalSales() {
-    return Template.instance().state.get("totalSales");
+  numOfOrders() {
+    return Template.instance().state.get("numOfOrders");
   },
   revenue() {
     return Template.instance().state.get("revenue");
+  },
+  qtySold() {
+    return Template.instance().state.get("qtySold");
   }
 });
