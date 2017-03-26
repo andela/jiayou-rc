@@ -1,3 +1,30 @@
 <template name="ordersAnalytics">
-  Hello
+  <div class="card data-container">
+    <h3>Get information about all orders</h3>
+    <br>
+    <table class="table table-striped" id="data-table">
+      {{#if orderData}}
+      <thead>
+        <tr>
+          <th>Orders Status</th>
+          <th>Number</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each orderData}}
+        <tr>
+          <td>{{status}}</td>
+          <td>{{number}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+      {{else}}
+      <thead>
+        <tr>
+          <th>No Data to display</th>
+        </tr>
+      </thead>
+      {{/if}}
+    </table>
+  </div>
 </template>
