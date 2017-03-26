@@ -1,5 +1,4 @@
 import { Template } from "meteor/templating";
-import { Products } from "/lib/collections";
 import { ReactiveDict } from "meteor/reactive-dict";
 
 // Data to populate the dropdown menu
@@ -29,6 +28,7 @@ Template.productsSold.events({
   "submit form[name=datePickerForm]"(event, template) {
     event.preventDefault();
 
+    // .trim() is very important
     const selectedYear = template.$("#year option:selected").text().trim();
     const selectedMonth = template.$("#month option:selected").text().trim();
 

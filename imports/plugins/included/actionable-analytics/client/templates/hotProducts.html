@@ -1,8 +1,10 @@
-<template name="productsSold">
+<template name="hotProducts">
   <div class="card data-container">
-    <h3>Get information about sales made for a particular period</h3>
+    <h3>Here are the best selling products</h3>
+
     <br>
-    <form name="datePickerForm" class="form-inline" id="date-picker">
+
+    <form name="datePickerForm2" class="form-inline" id="data-table">
       <div class="form-group">
         <label for="year">Year</label>
         <select class="form-control input-view" id="year" style="text-align-last: center;">
@@ -26,24 +28,30 @@
 
     <br>
 
-    <!--Table to display the aggregate data of sales for a particular period-->
+    <!--Table to display data about the best selling products-->
     <table class="table table-striped" id="data-table">
-        <thead>
-          <tr>
-            <th>Year</th>
-            <th>Month</th>
-            <th>Total Sales</th>
-            <th>Revenue</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="col-md-4">{{selectedYear}}</td>
-            <td class="col-md-4">{{selectedMonth}}</td>
-            <td class="col-md-4">{{totalSales}}</td>
-            <td class="col-md-4">{{revenue}}</td>
-          </tr>
-        </tbody>
-      </table>
+      {{#if allOrders}}
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Quantity Sold</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each allOrders}}
+        <tr>
+          <td>{{product}}</td>
+          <td>{{quantity}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+      {{else}}
+      <thead>
+        <tr>
+          <th>No Data to display</th>
+        </tr>
+      </thead>
+      {{/if}}
+    </table>
   </div>
 </template>

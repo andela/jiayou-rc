@@ -1,8 +1,5 @@
 import { Meteor } from "meteor/meteor";
-import { Orders } from "/lib/collections";
-import { Accounts } from "/lib/collections";
-import { Products } from "/lib/collections";
-import { Shops } from "/lib/collections";
+import { Orders, Accounts, Products, Shops } from "/lib/collections";
 
 Meteor.methods({
   "analytics/get-orders": function () {
@@ -25,6 +22,16 @@ Meteor.methods({
 
   "analytics/get-shops": function () {
     return Shops.find().fetch();
+  },
+
+  "analytics/get-all-products-ids": function () {
+    const allIDs = [];
+    const allProducts = Products.find().fetch();
+
+    allProducts.forEach((product) => {
+      allIDs.push(product._id);
+    });
+    return allIDs;
   },
 
   "analytics/getProductOrder": function (productId) {
