@@ -39,6 +39,9 @@ BrowserPolicy.content.allowOriginForAll("cdnjs.cloudflare.com");
 BrowserPolicy.content.allowOriginForAll("fonts.googleapis.com");
 BrowserPolicy.content.allowOriginForAll("fonts.gstatic.com");
 BrowserPolicy.content.allowOriginForAll("fonts.gstatic.com");
+BrowserPolicy.framing.restrictToOrigin("localhost:3000");
+
 
 BrowserPolicy.content.allowOriginForAll("enginex.kadira.io");
 BrowserPolicy.content.allowOriginForAll("*.stripe.com");
+
