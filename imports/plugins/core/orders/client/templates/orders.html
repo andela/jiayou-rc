@@ -56,7 +56,14 @@
         {{> ordersListItems order=order currencyFormat=currencyFormat}}
       </div>
     </div>
-
+    {{#if isCanceled order }}
+    <div style="text-align: center;">
+      Reason for Canceled Order:
+      <span style="badge badge-pill badge-warning">
+        {{ canceledReason order}}
+      </span>
+    </div>
+    {{/if}}
     <div class="controls">
       {{#if orderIsNew order}}
         <button class="btn btn-success" data-event-action="startProcessingOrder">Start</button>

@@ -28,7 +28,13 @@ BrowserPolicy.content.allowOriginForAll("*.facebook.com");
 BrowserPolicy.content.allowOriginForAll("*.fbcdn.net");
 BrowserPolicy.content.allowOriginForAll("connect.facebook.net");
 BrowserPolicy.content.allowOriginForAll("*.googleusercontent.com");
-
+BrowserPolicy.content.allowOriginForAll("*.disqus.com");
+BrowserPolicy.content.allowOriginForAll("disqus.com");
+BrowserPolicy.content.allowOriginForAll("*.disquscdn.com");
+BrowserPolicy.content.allowOriginForAll("disquscdn.com");
+BrowserPolicy.content.allowOriginForAll("twitter.com");
+BrowserPolicy.content.allowOriginForAll("*.twitter.com");
+BrowserPolicy.content.allowOriginForAll("*.twimg.com");
 BrowserPolicy.content.allowImageOrigin("fbcdn-profile-a.akamaihd.net");
 BrowserPolicy.content.allowImageOrigin("secure.gravatar.com");
 BrowserPolicy.content.allowImageOrigin("i0.wp.com");
@@ -44,8 +50,8 @@ BrowserPolicy.framing.restrictToOrigin("localhost:3000");
 
 BrowserPolicy.content.allowOriginForAll("enginex.kadira.io");
 BrowserPolicy.content.allowOriginForAll("*.stripe.com");
-
 BrowserPolicy.content.allowOriginForAll("*.paystack.co");
 BrowserPolicy.content.allowOriginForAll("*.paystack.com");
 BrowserPolicy.content.allowOriginForAll("http://js.paystack.co");
 BrowserPolicy.content.allowOriginForAll("https://paystack.com");
+
