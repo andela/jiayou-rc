@@ -2,6 +2,7 @@ import _ from "lodash";
 import { Session } from "meteor/session";
 import { Template } from "meteor/templating";
 import { Reaction } from "/client/api";
+import { Accounts } from "/lib/collections";
 import Logger from "/client/modules/logger";
 import { ReactionProduct } from "/lib/api";
 import Sortable from "sortablejs";
@@ -91,6 +92,17 @@ Template.productGrid.helpers({
     return Template.instance().state.equals("canLoadMoreProducts", true);
   },
   products() {
-    return Template.currentData().products;
+    const userId = Meteor.userId();
+    let products = Template.currentData().products;
+    const userDetails = Accounts.findOne({ _id: userId });
+    if (userDetails && userDetails.isVendor) {
+      products = products.filter(product => {
+        if (product.creatorId === userId) {
+          return product;
+        }
+      });
+      return products;
+    }
+    return products;
   }
 });

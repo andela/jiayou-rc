@@ -148,7 +148,9 @@ class ProductDetail extends Component {
                   }}
                 />
               </div>
-
+              <input className="hidden" type="text" name="creatorId" value={Meteor.userId()}
+                onChange={this.props.onProductFieldChange}
+              />
               <div className="pdp product-info">
                 <ProductField
                   editable={this.editable}

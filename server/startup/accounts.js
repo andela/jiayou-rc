@@ -78,9 +78,6 @@ export default function () {
    * @see: http://docs.meteor.com/#/full/accounts_oncreateuser
    */
   Accounts.onCreateUser((options, user) => {
-    if (Object.keys(options.profile).length !== 0) {
-      isVendor = (options.profile.vendorDetails[0].isVendor) ? options.profile.vendorDetails[0].isVendor : false;
-    }
     const shop = Reaction.getCurrentShop();
     const shopId = shop._id;
     const defaultVisitorRole = ["anonymous", "guest", "product", "tag", "index", "cart/checkout", "cart/completed"];
@@ -106,7 +103,8 @@ export default function () {
       "dashboard/shipping"
     ];
     const additionals = {
-      profile: Object.assign({}, options && options.profile)
+      profile: Object.assign({}, options && options.profile),
+      isVendor: options.isVendor
     };
     if (!user.emails) user.emails = [];
     // init default user roles
@@ -158,6 +156,7 @@ export default function () {
       }
     }
     // clone before adding roles
+
     const account = Object.assign({}, user, additionals);
     account.userId = user._id;
     Collections.Accounts.insert(account);
