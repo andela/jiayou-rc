@@ -162,16 +162,13 @@ Template.wallet.events({
     if (amount > Template.instance().state.get("details").balance) {
       Alerts.toast("Insufficient balance", "error");
       return false;
-    }
-    if (isNaN(amount) || amount <= 0) {
+    } else if (isNaN(amount) || amount <= 0) {
       Alerts.toast("Amount being inputted should be valid", "error");
       return false;
-    }
-    if (recipientEmail === Accounts.findOne(Meteor.userId()).emails[0].address) {
+    } else if (recipientEmail === Accounts.findOne(Meteor.userId()).emails[0].address) {
       Alerts.toast("You cannot transfer money to yourself", "error");
       return false;
-    }
-    if (!mailRegex.test(recipientEmail)) {
+    } else if (!mailRegex.test(recipientEmail)) {
       Alerts.toast("Invalid email address", "error");
     } else {
       if (comparePin) {

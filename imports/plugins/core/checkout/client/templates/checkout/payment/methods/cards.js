@@ -45,6 +45,7 @@ Template.corePaymentMethods.helpers({
     return self;
   }
 });
+
 Template.payWithWallet.onCreated(function bodyOnCreated() {
   this.state = new ReactiveDict();
   this.state.set("details", { balance: 0 });
@@ -93,7 +94,7 @@ Template.payWithWallet.events({
               storedCard: "",
               method: "Wallet",
               transactionId,
-              currency: currency,
+              currency,
               amount: cartAmount,
               status: "passed",
               mode: "authorize",
@@ -103,7 +104,7 @@ Template.payWithWallet.events({
             const theTransaction = {
               amount: cartAmount,
               transactionId,
-              currency: currency
+              currency
             };
             paymentMethod.transactions.push(theTransaction);
             Meteor.call("cart/submitPayment", paymentMethod);
