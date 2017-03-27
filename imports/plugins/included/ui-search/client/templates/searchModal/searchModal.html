@@ -9,6 +9,12 @@
       {{> searchInput }}
 
       {{> searchTypeToggle }}
+      <div class="row" style="width: 60%;">
+
+    <div class="col-md-3">{{> searchSort }}</div>
+
+    <div class="col-md-9">{{> searchFilter data=getBrands }}</div>
+    </div>
 
       {{> productSearchTags tagSearchResults=tagSearchResults }}
 
