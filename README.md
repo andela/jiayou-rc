@@ -1,6 +1,6 @@
 # Reaction
 
-[![bitHound Overall Score](https://www.bithound.io/github/andela/jiayou-rc/badges/score.svg)](https://www.bithound.io/github/andela/jiayou-rc) [![bitHound Dev Dependencies](https://www.bithound.io/github/andela/jiayou-rc/badges/devDependencies.svg)](https://www.bithound.io/github/andela/jiayou-rc/develop/dependencies/npm) [![bitHound Code](https://www.bithound.io/github/andela/jiayou-rc/badges/code.svg)](https://www.bithound.io/github/andela/jiayou-rc) [![Code Climate](https://codeclimate.com/github/andela/jiayou-rc/badges/gpa.svg)](https://codeclimate.com/github/andela/jiayou-rc) [![Circle CI](https://circleci.com/gh/andela/jiayou-rc.svg?style=svg)](https://circleci.com/gh/andela/jiayou-rc) 
+[![bitHound Overall Score](https://www.bithound.io/github/andela/jiayou-rc/badges/score.svg)](https://www.bithound.io/github/andela/jiayou-rc) [![bitHound Dev Dependencies](https://www.bithound.io/github/andela/jiayou-rc/badges/devDependencies.svg)](https://www.bithound.io/github/andela/jiayou-rc/develop/dependencies/npm) [![bitHound Code](https://www.bithound.io/github/andela/jiayou-rc/badges/code.svg)](https://www.bithound.io/github/andela/jiayou-rc) [![Code Climate](https://codeclimate.com/github/andela/jiayou-rc/badges/gpa.svg)](https://codeclimate.com/github/andela/jiayou-rc) [![Circle CI](https://circleci.com/gh/andela/jiayou-rc.svg?style=svg)](https://circleci.com/gh/andela/jiayou-rc)
 [![Coverage Status](https://coveralls.io/repos/github/andela/jiayou-rc/badge.svg?)](https://coveralls.io/github/andela/jiayou-rc?)
 
 Reaction is a modern reactive, real-time event driven ecommerce platform.
@@ -100,4 +100,4 @@ We require that all releases are deployable as [Docker](https://www.docker.com/)
 
 ##### Docker
 
-Docker images are pushed when Reaction sucessfully builds and passes all tests on the `master` or `development` branches. These images are released on [Reaction Commerce Docker Hub](https://hub.docker.com/u/reactioncommerce/). There are two images available: [reactioncommerce:prequel](https://hub.docker.com/r/reactioncommerce/prequel/) - the latest `development` image and [reactioncommerce:reaction](https://hub.docker.com/r/reactioncommerce/reaction/), the `master` image.
+Docker images are pushed when Reaction sucessfully builds and passes all tests on the `master` or `development` branches. These images are released on [Reaction Commerce Docker Hub](https://hub.docker.com/u/reactioncommerce/). There are two images available: [reactioncommerce:prequel](https://hub.docker.com/r/reactioncommerce/prequel/) - the latest `development` image and [reactioncommerce:reaction](https://hub.docker.com/r/reactioncommerce/reaction/), the `master` image..
