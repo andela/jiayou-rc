@@ -42,3 +42,4 @@ imports/plugins/custom/*
 coverage
 .coverage/
 
+.coveralls.yml
