@@ -1,3 +1,5 @@
+/* eslint no-undef: 0 */
+
 import { Packages, Shops, Wallet, Cart } from "/lib/collections";
 import { Template } from "meteor/templating";
 import { Meteor } from "meteor/meteor";
