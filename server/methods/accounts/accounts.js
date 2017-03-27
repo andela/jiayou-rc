@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import * as Collections from "/lib/collections";
 import * as Schemas from "/lib/collections/schemas";
 import { Logger, Reaction } from "/server/api";
@@ -132,7 +133,9 @@ Meteor.methods({
     // happens when the user clicked the address in grid. We need to set type
     // to `true`
     if (typeof type === "string") {
-      Object.assign(address, { [type]: true });
+      Object.assign(address, {
+        [type]: true
+      });
     }
 
     if (oldAddress.isShippingDefault !== address.isShippingDefault ||
