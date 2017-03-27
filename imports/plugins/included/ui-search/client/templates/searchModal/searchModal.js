@@ -42,7 +42,27 @@ Template.searchModal.onCreated(function () {
       });
     }
   });
+  filterPrice = (products, query) => {
+    return _.filter(products, (product) => {
+      if (product.price) {
+        const productMaxPrice = parseFloat(product.price.max);
+        const productMinPrice = parseFloat(product.price.min);
+        const queryMaxPrice = parseFloat(query[1]);
+        const queryMinPrice = parseFloat(query[0]);
+        if (productMinPrice >= queryMinPrice && productMaxPrice <= queryMaxPrice) {
+          return product;
+        }
+      }
+    });
+  };
 
+  filterBrand = (products, query) => {
+    return _.filter(products, (product) => {
+      if (product.vendor === query) {
+        return product;
+      }
+    });
+  };
 
   this.autorun(() => {
     const searchCollection = this.state.get("searchCollection") || "products";
@@ -147,6 +167,13 @@ Template.searchModal.helpers({
   },
   showSearchResults() {
     return false;
+  },
+  // Get vendor
+  getBrands() {
+    const instance = Template.instance();
+    const result = instance.state.get("productSearchResults");
+    const brand = _.map(result, "vendor");
+    return _.uniq(brand) || [];
   }
 });
 
@@ -165,7 +192,7 @@ Template.searchModal.events({
       $(".search-modal-header").addClass("active-search");
     }
   },
-  "click [data-event-action=filter]": function (event, templateInstance) {
+  "click [data-event-action=filter]": (event, templateInstance) => {
     event.preventDefault();
     const instance = Template.instance();
     const facets = instance.state.get("facets") || [];
@@ -176,6 +203,27 @@ Template.searchModal.events({
     $(event.target).toggleClass("active-tag btn-active");
 
     templateInstance.state.set("facets", facets);
+  },
+   // Sort productSearch
+  "change [data-event-action=sort]": function (event, templateInstance) {
+    const searchResult = templateInstance.state.get("productSearchResults");
+    const sortValue = templateInstance.find("#selectSort").value.split("_");
+    const orderedSort = _.orderBy(searchResult, [sortValue[0]], [sortValue[1]]);
+    templateInstance.state.set("productSearchResults", orderedSort);
+  },
+    // Price Filter
+  "change #priceFilter": function (event, templateInstance) {
+    const searchResult = templateInstance.state.get("productSearchResults");
+    const filterValue = templateInstance.find("#priceFilter").value.split("_");
+    const newFilterValue = filterPrice(searchResult, filterValue);
+    templateInstance.state.set("productSearchResults", newFilterValue);
+  },
+   // Brand Filter
+  "change #brandFilter": function (event, templateInstance) {
+    const searchResult = templateInstance.state.get("productSearchResults");
+    const filterValue = templateInstance.find("#brandFilter").value;
+    const newFilterValue = filterBrand(searchResult, filterValue);
+    templateInstance.state.set("productSearchResults", newFilterValue);
   },
   "click [data-event-action=productClick]": function () {
     const instance = Template.instance();
