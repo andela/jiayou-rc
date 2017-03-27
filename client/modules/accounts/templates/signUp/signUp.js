@@ -39,9 +39,7 @@ Template.loginFormSignUpView.events({
     const emailInput = template.$(".login-input-email");
     const passwordInput = template.$(".login-input-password");
     isVendor = Session.get("isVendor");
-    if (isVendor === "asVendor") {
-      isVendor = true;
-    }
+    isVendor  = isVendor === "asVendor" ? true :  false;
     const username = usernameInput.val().trim();
     const email = emailInput.val().trim();
     const password = passwordInput.val().trim();
@@ -84,8 +82,7 @@ Template.loginFormSignUpView.events({
           shopName: shopName,
           shopPhone: shopPhone,
           shopAddress: shopAddress,
-          shopActive: false,
-          isVendor: isVendor
+          shopActive: false
         }]
       };
     }
@@ -97,6 +94,7 @@ Template.loginFormSignUpView.events({
       // prevent signup
       return;
     }
+    console.log(isVendor, "isVendor");
     const newUserData = {
       username: username,
       email: email,
