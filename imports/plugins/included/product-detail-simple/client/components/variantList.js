@@ -125,12 +125,12 @@ class VariantList extends Component {
   }
 
   showIfNotDigital() {
-    if (this.props.isDigital === "" || !this.props.isDigital) {
+    if (typeof this.props.isDigital !== "undefined"  &&  this.props.isDigital) {
       return (
         <div>
         <Divider
           i18nKeyLabel="productDetail.availableOptions"
-          label="Available Options"
+          label=".::."
         />
         <div className="row variant-product-options">
           {this.renderChildVariants()}

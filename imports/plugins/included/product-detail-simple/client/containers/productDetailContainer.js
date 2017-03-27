@@ -21,9 +21,6 @@ class ProductDetailContainer extends Component {
     };
     this.listenToIsDigital = this.listenToIsDigital.bind(this);
   }
-  // componentWillMount() {
-  //   this.renderVendorDetails();
-  // }
 
   get isDigital() {
     return ReactionProduct.isDigitalProduct(this.props.product._id);
@@ -77,7 +74,8 @@ class ProductDetailContainer extends Component {
         });
       } else {
         productId = currentProduct._id;
-        const isDigital = currentProduct.isDigital;
+        // const isDigital = currentProduct.isDigital;
+        const {isDigital} = currentProduct;
         if (productId) {
           Meteor.call("cart/addToCart", productId, currentVariant._id, quantity, isDigital, (error) => {
             if (error) {
@@ -154,7 +152,7 @@ class ProductDetailContainer extends Component {
   }
 
   listenToIsDigital(isDigital) {
-    this.setState({isDigital: isDigital});
+    this.setState({isDigital});
   }
   render() {
     return (

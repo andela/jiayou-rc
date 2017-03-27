@@ -95,11 +95,10 @@ class ProductDetail extends Component {
     return null;
   }
   switchDigital(e) {
-    this.setState({digital: e.target.checked});
-    const productId = this.props.product._id;
     const checked = e.target.checked;
+    this.setState({digital: checked});
+    const productId = this.props.product._id;
     this.props.onProductFieldChange(productId, "isDigital", checked);
-    this.props.changeParentIsDigitalState(e.target.checked);
     if (!this.state.digital) {
       this.setState({cartQuantityType: "hidden"});
     } else {
@@ -125,8 +124,7 @@ class ProductDetail extends Component {
   }
 
   handleCategoryStateChange(e) {
-    const value = e.target.value;
-    this.setState({categoryValue: value});
+    this.setState({categoryValue: e.target.value});
   }
 
   handleUploadClick(e) {
