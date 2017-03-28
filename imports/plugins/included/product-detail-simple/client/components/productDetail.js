@@ -38,7 +38,6 @@ class ProductDetail extends Component {
     this.switchDigital = this.switchDigital.bind(this);
     this.handleCategoryStateChange = this.handleCategoryStateChange.bind(this);
     this.handleUploadClick = this.handleUploadClick.bind(this);
-    this.deleteFile = this.deleteFile.bind(this);
   }
   get tags() {
     return this.props.tags || [];
@@ -172,14 +171,14 @@ class ProductDetail extends Component {
     return (new FS.File(result).url());
   }
 
-  deleteFile() {
-    if (this.state.fileId) {
-      return (
-        <button className="btn btn-danger no-round">Delete Uploaded File</button>
-      );
-    }
-    return null;
-  }
+  // deleteFile() {
+  //   if (this.state.fileId) {
+  //     return (
+  //       <button className="btn btn-danger no-round">Delete Uploaded File</button>
+  //     );
+  //   }
+  //   return null;
+  // }
 
   renderDigitalDetails() {
     if (this.props.hasAdminPermission && this.state.digital) {
@@ -202,7 +201,7 @@ class ProductDetail extends Component {
 
           <input className="btn btn-success hidden" type="file" id="uploadFile" onChange={this.handleUploadClick}/>
           <label className="btn btn-success no-round" htmlFor="uploadFile">Upload Digital product</label>
-          {this.deleteFile()}
+
         </div>
       );
     }
