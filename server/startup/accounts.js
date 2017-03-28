@@ -124,7 +124,7 @@ export default function () {
       // if we don't have user.services we're an anonymous user
       if (!user.services) {
         roles[shopId] = shop.defaultVisitorRole || defaultVisitorRole;
-      } else if (isVendor) {
+      } else if (additionals.isVendor) {
         roles[shopId] = vendorRoles;
       } else {
         roles[shopId] = shop.defaultRoles || defaultRoles;

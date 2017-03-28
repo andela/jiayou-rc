@@ -20,6 +20,7 @@ export default function () {
     try {
       Fixture.process(Assets.getText("data/Shipping.json"), ["name"], Reaction.Import.shipping);
     } catch (error) {
+      console.log(error);
       Logger.info("Bypassing loading Shipping default data.");
     }
 
