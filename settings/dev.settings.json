@@ -7,5 +7,10 @@
     "REACTION_EMAIL": ""
   },
   "isDebug": "info",
-  "public": {}
+  "public": {},
+  "SMS": {
+    "APIKEY": "",
+    "APITOKEN": "",
+    "SENDER": ""
+  }
 }

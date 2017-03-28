@@ -5,12 +5,12 @@
     <div class="menu">
       {{> tagNav tagNavProps}}
     </div>
-
+   
     <script type="text/javascript">
     $(document).ready(function() {
       welcome.init()
     });</script>
-
+  
     <div onclick="welcome.start()">
       <a href="{{pathFor '/reaction/dashboard'}}"><i class="help fa fa-bus fa-1x" id="welcome"></i></a>
     </div>

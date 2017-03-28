@@ -55,7 +55,6 @@ Template.CoreNavigationBar.helpers({
       }
     };
   },
-
   tagNavProps() {
     const instance = Template.instance();
     let tags = [];

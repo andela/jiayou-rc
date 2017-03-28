@@ -1,6 +1,7 @@
+/* eslint no-undef: 0*/
 import moment from "moment";
 import { Template } from "meteor/templating";
-import { Orders, Shops } from "/lib/collections";
+import { Orders, Shops, Audio, Video, Software, Book} from "/lib/collections";
 import { i18next } from "/client/api";
 
 /**
@@ -15,6 +16,33 @@ Template.dashboardOrdersList.helpers({
       return "Canceled";
     }
     return i18next.t("order.processing");
+  },
+  showDigitalFileDownload() {
+    const productId = this.items[0].productId;
+    const sub = Meteor.subscribe("Product", productId);
+
+    const getDigitalProductType = (db, product) => {
+      Meteor.subscribe(product.digitalInfo.category, productId).ready();
+      const result = db.findOne({
+        "metadata.productId": productId
+      });
+      return result;
+    };
+    if (sub.ready()) {
+      const product = Products.findOne(productId);
+
+      if (product.digitalInfo.category === "audio") {
+        return getDigitalProductType(Audio, product);
+      } else if (product.digitalInfo.category === "video") {
+        return getDigitalProductType(Video, product);
+      } else if (product.digitalInfo.category === "book") {
+        return getDigitalProductType(Book, product);
+      } else if (product.digitalInfo.category === "software") {
+        return getDigitalProductType(Software, product);
+      }
+      return product.isDigital;
+    }
+    return null;
   },
   orders(data) {
     if (data.hash.data) {

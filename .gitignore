@@ -40,8 +40,8 @@ imports/plugins/custom/*
 
 .reaction/config.json
 .vscode/
+settings.json
 coverage
 .coverage/
-
 .coveralls.yml
 

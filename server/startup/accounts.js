@@ -78,34 +78,34 @@ export default function () {
    * @see: http://docs.meteor.com/#/full/accounts_oncreateuser
    */
   Accounts.onCreateUser((options, user) => {
-    let isVendor = false;
-    if (Object.keys(options.profile).length !== 0) {
-      isVendor = (options.profile.vendorDetails[0].isVendor) ? options.profile.vendorDetails[0].isVendor : false;
-    }
+    // let isVendor = false;
+    // if (Object.keys(options.profile).length !== 0) {
+    //   isVendor = (options.profile.vendorDetails[0].isVendor) ? options.profile.vendorDetails[0].isVendor : false;
+    // }
     const shop = Reaction.getCurrentShop();
     const shopId = shop._id;
     const defaultVisitorRole = ["anonymous", "guest", "product", "tag", "index", "cart/checkout", "cart/completed"];
     // Check
     const defaultRoles = ["guest", "account/profile", "product", "tag", "index", "cart/checkout", "cart/completed"];
     const roles = {};
-    const vendorRoles = [
-      "guest",
-      "account/profile",
-      "product",
-      "tag",
-      "index",
-      "cart/checkout",
-      "cart/completed",
-      "dashboard",
-      "createProduct",
-      "reaction-dashboard",
-      "reaction-orders",
-      "reaction-shipping",
-      "orders",
-      "shipping",
-      "dashboard/orders",
-      "dashboard/shipping"
-    ];
+    // const vendorRoles = [
+    //   "guest",
+    //   "account/profile",
+    //   "product",
+    //   "tag",
+    //   "index",
+    //   "cart/checkout",
+    //   "cart/completed",
+    //   "dashboard",
+    //   "createProduct",
+    //   "reaction-dashboard",
+    //   "reaction-orders",
+    //   "reaction-shipping",
+    //   "orders",
+    //   "shipping",
+    //   "dashboard/orders",
+    //   "dashboard/shipping"
+    // ];
     const additionals = {
       profile: Object.assign({}, options && options.profile)
     };
@@ -127,8 +127,8 @@ export default function () {
       // if we don't have user.services we're an anonymous user
       if (!user.services) {
         roles[shopId] = shop.defaultVisitorRole || defaultVisitorRole;
-      } else if (isVendor) {
-        roles[shopId] = vendorRoles;
+      // } else if (isVendor) {
+      //   roles[shopId] = vendorRoles;
       } else {
         roles[shopId] = shop.defaultRoles || defaultRoles;
       }
