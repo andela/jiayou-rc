@@ -1,4 +1,5 @@
 /* eslint no-undef: 0 */
+/* eslint-disable no-unused-vars */
 
 import { Packages, Shops, Wallet, Cart } from "/lib/collections";
 import { Template } from "meteor/templating";

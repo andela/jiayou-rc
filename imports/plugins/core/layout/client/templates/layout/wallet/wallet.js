@@ -1,4 +1,6 @@
 /* eslint no-undef: 0 */
+/* eslint-disable no-unused-vars */
+
 import { Meteor } from "meteor/meteor";
 import { Template } from "meteor/templating";
 import { Reaction } from "/client/api";
