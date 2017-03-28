@@ -1,0 +1,29 @@
+<template name="actionableAnalytics">
+  <div>
+    <ul class="nav nav-pills">
+      <li class="active"><a data-toggle="tab" href="#overview">Overview</a></li>
+      <li><a data-toggle="tab" href="#productsMenu">Products Sold</a></li>
+      <li><a data-toggle="tab" href="#hotProductsMenu">Hot Products</a></li>
+      <li><a data-toggle="tab" href="#customersMenu">Customers</a></li>
+      <li><a  data-toggle="tab" href="#ordersMenu">Orders</a></li>
+    </ul>
+
+    <div class="tab-content">
+      <div id="overview" class="tab-pane fade in active">
+        {{ > overview }}
+      </div>
+      <div id="productsMenu" class="tab-pane fade">
+        {{ > productsSold }}
+      </div>
+      <div id="hotProductsMenu" class="tab-pane fade">
+        {{ > hotProducts }}
+      </div>
+      <div id="customersMenu" class="tab-pane fade">
+        {{> customers }}
+      </div>
+      <div id="ordersMenu" class="tab-pane fade">
+        {{> ordersAnalytics}}
+      </div>
+    </div>
+  </div>
+</template>
