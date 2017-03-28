@@ -38,7 +38,6 @@ Meteor.call("analytics/get-orders", (error, result) => {
 Template.hotProducts.events({
   "submit form[name=datePickerForm2]"(event, template) {
     event.preventDefault();
-
     // .trim() is very important
     const selectedYear = template.$("#year option:selected").text().trim();
     const selectedMonth = template.$("#month option:selected").text().trim();
@@ -51,12 +50,10 @@ Template.hotProducts.events({
     Template.instance().state.set("selectedMonth", selectedMonth);
 
     Meteor.call("analytics/get-orders", (error, result) => {
-
       /**
         * This object contains information about all the quantity sold
         * for each product in an order
        */
-
       const allOrders = {};
       result.forEach((order) => {
         if (order.createdAt.getMonth() === dateData.monthsMapped[selectedMonth] &&
@@ -96,7 +93,7 @@ Template.hotProducts.helpers({
     const orders = Template.instance().state.get("allOrders");
     // We set a threshold of 5 sales or more to classify a product as 'hot'
     for (const key in orders) {
-      if (orders[key][0] >= 5) {
+      if (orders[key][0] >= 1) {
         ordersArray.push({
           product: key,
           quantity: orders[key][0]
