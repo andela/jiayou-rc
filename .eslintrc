@@ -8,7 +8,8 @@
   "parserOptions": {
      "ecmaVersion": 6,
      "sourceType": "module",
-     "allowImportExportEverywhere": true
+     "allowImportExportEverywhere": true,
+     "esversion": 6
   },
   "plugins": ["react"],
   "ecmaFeatures": {
