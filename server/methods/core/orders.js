@@ -11,7 +11,6 @@ import { getSlug } from "/lib/api";
 import { Cart, Media, Orders, Products, Shops} from "/lib/collections";
 import * as Schemas from "/lib/collections/schemas";
 import { Logger, Reaction} from "/server/api";
-import { HTTP } from "meteor/http";
 
 /**
  * Reaction Order Methods
@@ -342,7 +341,7 @@ Meteor.methods({
         const success = "SMS SENT TO CUSTOMER";
         Meteor.call("orders/response/error", error, success);
       });
-      vendorAlertMessage = "You have pending orders on your store";
+      const vendorAlertMessage = "You have pending orders on your store";
       // Filter out the duplicate values
       vendorPhones = vendorPhones.filter((item, index, inputArray) => {
         return inputArray.indexOf(item) === index;
@@ -520,8 +519,8 @@ Meteor.methods({
       }
       Logger.info(res);
       Logger.info("Your New order has been successfully received and is been processed");
-      Logger.info(SENDER);
       Logger.info(recipientPhoneNo);
+      return Logger.info(SENDER);
     });
   },
 
