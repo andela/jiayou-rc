@@ -32,7 +32,7 @@ export default function () {
       const userEmail = _.filter(attempt.user.emails, function (email) {
         return email.address === loginEmail;
       });
-/* eslint-disable no-undef */
+      /* eslint-disable no-undef */
       // check if the email is verified
       if (!userEmail.length || !userEmail[0].verified) {
         throw new Meteor.Error("403", "Oops! Please validate your email first.");
@@ -78,34 +78,34 @@ export default function () {
    * @see: http://docs.meteor.com/#/full/accounts_oncreateuser
    */
   Accounts.onCreateUser((options, user) => {
-    let isVendor = false;
-    if (Object.keys(options.profile).length !== 0) {
-      isVendor = (options.profile.vendorDetails[0].isVendor) ? options.profile.vendorDetails[0].isVendor : false;
-    }
+    // let isVendor = false;
+    // if (Object.keys(options.profile).length !== 0) {
+    //   isVendor = (options.profile.vendorDetails[0].isVendor) ? options.profile.vendorDetails[0].isVendor : false;
+    // }
     const shop = Reaction.getCurrentShop();
     const shopId = shop._id;
     const defaultVisitorRole = ["anonymous", "guest", "product", "tag", "index", "cart/checkout", "cart/completed"];
     // Check
     const defaultRoles = ["guest", "account/profile", "product", "tag", "index", "cart/checkout", "cart/completed"];
     const roles = {};
-    const vendorRoles = [
-      "guest",
-      "account/profile",
-      "product",
-      "tag",
-      "index",
-      "cart/checkout",
-      "cart/completed",
-      "dashboard",
-      "createProduct",
-      "reaction-dashboard",
-      "reaction-orders",
-      "reaction-shipping",
-      "orders",
-      "shipping",
-      "dashboard/orders",
-      "dashboard/shipping"
-    ];
+    // const vendorRoles = [
+    //   "guest",
+    //   "account/profile",
+    //   "product",
+    //   "tag",
+    //   "index",
+    //   "cart/checkout",
+    //   "cart/completed",
+    //   "dashboard",
+    //   "createProduct",
+    //   "reaction-dashboard",
+    //   "reaction-orders",
+    //   "reaction-shipping",
+    //   "orders",
+    //   "shipping",
+    //   "dashboard/orders",
+    //   "dashboard/shipping"
+    // ];
     const additionals = {
       profile: Object.assign({}, options && options.profile)
     };
@@ -127,34 +127,34 @@ export default function () {
       // if we don't have user.services we're an anonymous user
       if (!user.services) {
         roles[shopId] = shop.defaultVisitorRole || defaultVisitorRole;
-      } else if (isVendor) {
-        roles[shopId] = vendorRoles;
+        // } else if (additionals.isVendor) {
+        //   roles[shopId] = vendorRoles;
       } else {
         roles[shopId] = shop.defaultRoles || defaultRoles;
-      }
-      // also add services with email defined to user.emails[]
-      for (const service in user.services) {
-        if (user.services[service].email) {
-          const email = {
-            provides: "default",
-            address: user.services[service].email,
-            verified: true
-          };
-          user.emails.push(email);
-        }
-        if (user.services[service].name) {
-          user.username = user.services[service].name;
-          additionals.profile.name = user.services[service].name;
-        }
-        // TODO: For now we have here instagram, twitter and google avatar cases
-        // need to make complete list
-        if (user.services[service].picture) {
-          additionals.profile.picture = user.services[service].picture;
-        } else if (user.services[service].profile_image_url_https) {
-          additionals.profile.picture = user.services[service].
-            dprofile_image_url_https;
-        } else if (user.services[service].profile_picture) {
-          additionals.profile.picture = user.services[service].profile_picture;
+        // also add services with email defined to user.emails[]
+        for (const service in user.services) {
+          if (user.services[service].email) {
+            const email = {
+              provides: "default",
+              address: user.services[service].email,
+              verified: true
+            };
+            user.emails.push(email);
+          }
+          if (user.services[service].name) {
+            user.username = user.services[service].name;
+            additionals.profile.name = user.services[service].name;
+          }
+          // TODO: For now we have here instagram, twitter and google avatar cases
+          // need to make complete list
+          if (user.services[service].picture) {
+            additionals.profile.picture = user.services[service].picture;
+          } else if (user.services[service].profile_image_url_https) {
+            additionals.profile.picture = user.services[service].
+              dprofile_image_url_https;
+          } else if (user.services[service].profile_picture) {
+            additionals.profile.picture = user.services[service].profile_picture;
+          }
         }
       }
     }
@@ -203,8 +203,8 @@ export default function () {
       Meteor.users.update({
         _id: options.user._id
       }, update, {
-        multi: true
-      });
+          multi: true
+        });
       // debug info
       Logger.debug("removed anonymous role from user: " +
         options.user._id);
