@@ -18,6 +18,8 @@ import "./templates/orderPage/orderPage.js";
 import "./templates/social/orderSocial.html";
 
 import "./templates/workflow/orderCompleted.html";
+import "./templates/workflow/cancelOrder.html";
+import "./templates/workflow/cancelOrder.js";
 import "./templates/workflow/orderSummary.html";
 import "./templates/workflow/shippingInvoice.html";
 import "./templates/workflow/shippingInvoice.js";
