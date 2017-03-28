@@ -1,0 +1,32 @@
+<template name="overview">
+  <div class="card data-container">
+    <h3 id="overview-table">Actionable Analytics Overview</h3>
+    <br>
+    <div>
+      <table class="table table-striped" id="data-table">
+        <tbody>
+          <tr>
+            <td class="col-md-4"><strong>Quantity of Products Sold</strong></td>
+            <td class="col-md-4">{{allSales}}</td>
+          </tr>
+          <tr>
+            <td class="col-md-4"><strong>Total Revenue</strong></td>
+            <td class="col-md-4">${{revenue}}</td>
+          </tr>
+          <tr>
+            <td class="col-md-4"><strong>Number of Orders</strong></td>
+            <td class="col-md-4">{{numberOfOrders}}</td>
+          </tr>
+          <tr>
+            <td class="col-md-4"><strong>Number of Customers</strong></td>
+            <td class="col-md-4">{{allUsers}}</td>
+          </tr>
+          <tr>
+            <td class="col-md-4"><strong>Number of Shops</strong></td>
+            <td class="col-md-4">{{numOfShops}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>

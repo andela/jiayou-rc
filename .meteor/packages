@@ -95,6 +95,8 @@ practicalmeteor:sinon
 
 
 # Custom Packages
+meteorhacks:aggregate
+chrismbeckett:toastr
 dispatch:mocha-phantomjs
 practicalmeteor:mocha-console-runner
 lmieulet:meteor-coverage
@@ -103,4 +105,3 @@ jquery                                      # Manipulate the DOM using CSS selec
 
 templating-tools
 themeteorchef:commonmark
-
