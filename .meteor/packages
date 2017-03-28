@@ -101,3 +101,6 @@ lmieulet:meteor-coverage
 flowkey:bootstrap-tour                      # A Meteor.js / Blaze integration for bootstrap-tour
 jquery                                      # Manipulate the DOM using CSS selectors
 
+templating-tools
+themeteorchef:commonmark
+
