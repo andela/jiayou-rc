@@ -175,7 +175,7 @@ Template.wallet.events({
     } else {
       if (comparePin) {
         Alert({
-          title: `Are you sure you want to transfer $${amount.toFixed(2)} to ${recipientEmail}?`,
+          title: `Are you sure you want to transfer NGN${(amount * getExchangeRate()).toFixed(2)} to ${recipientEmail}?`,
           text: "Funds will be deducted from your wallet",
           type: "warning",
           showConfirmButton: true,
