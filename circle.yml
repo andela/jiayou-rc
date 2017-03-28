@@ -5,13 +5,14 @@ machine:
     - docker
   pre:
     - hash meteor 2>/dev/null || curl https://install.meteor.com | /bin/sh
-    - mkdir -p ~/reaction
+    - npm install -g istanbul
 
 dependencies:
   cache_directories:
     - "~/.meteor"
     - "~/docker"
   override:
+    - mkdir $HOME/reaction
     - cd $HOME/reaction
     - .reaction/scripts/clone-packages.sh
     - .reaction/docker/scripts/plugin-loader.sh
