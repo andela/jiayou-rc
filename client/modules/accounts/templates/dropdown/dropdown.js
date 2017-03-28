@@ -1,3 +1,5 @@
+/* eslint no-undef: 0 */
+
 import { Reaction, Logger } from "/client/api";
 import { Tags } from "/lib/collections";
 import { Session } from "meteor/session";

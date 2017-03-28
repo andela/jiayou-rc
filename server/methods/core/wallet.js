@@ -1,3 +1,5 @@
+/* eslint no-undef: 0 */
+
 import { Meteor } from "meteor/meteor";
 import { Wallet, Accounts } from "/lib/collections";
 import * as Schemas from "/lib/collections/schemas";
