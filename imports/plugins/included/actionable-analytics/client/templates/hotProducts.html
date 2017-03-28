@@ -1,0 +1,57 @@
+<template name="hotProducts">
+  <div class="card data-container">
+    <h3>Here are the best selling products</h3>
+
+    <br>
+
+    <form name="datePickerForm2" class="form-inline" id="data-table">
+      <div class="form-group">
+        <label for="year">Year</label>
+        <select class="form-control input-view" id="year" style="text-align-last: center;">
+          <option selected>Select Year</option>
+          {{#each year in getYears}}
+            <option> {{year}} </option>
+          {{/each}}
+          </select> &nbsp;
+        <label for="month">Month</label>
+        <select class="form-control input-view" id="month" style="text-align-last: center;">
+          <option selected>Select Month</option>
+          {{#each month in getMonths}}
+            <option> {{month}} </option>
+          {{/each}}
+          </select> &nbsp;
+      </div>
+      <div class="form-group">
+        <button class="btn btn-info btn-block" type="submit">Submit</button>
+      </div>
+    </form>
+
+    <br>
+
+    <!--Table to display data about the best selling products-->
+    <table class="table table-striped" id="data-table">
+      {{#if allOrders}}
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Quantity Sold</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each allOrders}}
+        <tr>
+          <td>{{product}}</td>
+          <td>{{quantity}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+      {{else}}
+      <thead>
+        <tr>
+          <th>No Data to display</th>
+        </tr>
+      </thead>
+      {{/if}}
+    </table>
+  </div>
+</template>
