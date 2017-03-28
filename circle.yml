@@ -26,8 +26,9 @@ test:
 
 deployment:
   prequel:
-    branch: development
+    branch: develop
     commands:
+      - $JIAYOU_RC_TRIGGER
       - docker tag reactioncommerce/base:latest reactioncommerce/base:devel
       - docker tag reactioncommerce/reaction:latest reactioncommerce/prequel:latest
       - docker tag reactioncommerce/reaction:latest reactioncommerce/prequel:$CIRCLE_BUILD_NUM
