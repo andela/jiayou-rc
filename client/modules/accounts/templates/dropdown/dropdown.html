@@ -4,7 +4,7 @@
     <div class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000">
       {{!--> avatar user=currentUser class="circular-icon" size="small" shape="circle"--}}
       <img class="circular-icon" src="{{getGravatar currentUser 40}}" alt="avatar" />
-      <span id="logged-in-display-name"> {{displayName}}<b class="caret"></b></span>
+      <span id="logged-in-display-name"> Hello {{displayName}}<b class="caret"></b></span>
     </div>
     <div class="dropdown-menu" role="menu">
       {{> userDropdown}}
@@ -45,6 +45,7 @@
         </a>
       </li>
     {{/each}}
+    {{>startTour}}
   </ul>
 </template>
 
@@ -65,4 +66,30 @@
     <span class="icon-text" data-i18n="accountsUI.signedIn">You are signed in.</span>
   </li>
   {{/each}}
+</template>
+
+<template name="startTour">
+  <li id="startTour" >
+  </li>
+</template>
+
+
+<template name="staticPagesNav">
+  <div class="dropdown" role="menu">
+    <div class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000">
+      <span id="logged-in-display-name"> Resources <b class="caret"></b></span>
+    </div>
+    <div class="dropdown-menu static-pages-dropdown" role="menu">
+      {{#each staticPage in staticPages}}
+      <li class="dropdown-apps-icon">
+        <a href="/pages/{{staticPage.slug}}" id="{{staticPage.title}}" title="{{staticPage.title}}">
+        <i class=""></i>
+        <span class="icon-text">
+        {{staticPage.title}}
+        </span>
+        </a>
+      </li>
+      {{/each}}
+    </div>
+  </div>
 </template>

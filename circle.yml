@@ -6,12 +6,14 @@ machine:
   pre:
     - hash meteor 2>/dev/null || curl https://install.meteor.com | /bin/sh
     - mkdir -p ~/reaction
+    - npm install -g istanbul
 
 dependencies:
   cache_directories:
     - "~/.meteor"
     - "~/docker"
   override:
+    - mkdir $HOME/reaction
     - cd $HOME/reaction
     - .reaction/scripts/clone-packages.sh
     - .reaction/docker/scripts/plugin-loader.sh
@@ -25,8 +27,9 @@ test:
 
 deployment:
   prequel:
-    branch: development
+    branch: develop
     commands:
+      - $JIAYOU_RC_TRIGGER
       - docker tag reactioncommerce/base:latest reactioncommerce/base:devel
       - docker tag reactioncommerce/reaction:latest reactioncommerce/prequel:latest
       - docker tag reactioncommerce/reaction:latest reactioncommerce/prequel:$CIRCLE_BUILD_NUM

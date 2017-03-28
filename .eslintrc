@@ -98,7 +98,7 @@
     "react/jsx-no-bind": 0,
     "react/jsx-no-duplicate-props": 1,
     "react/jsx-no-literals": 0,
-    "react/jsx-no-undef": 1,
+    "react/jsx-no-undef": 0,
     "react/sort-prop-types": 1,
     "react/jsx-sort-props": 0,
     "react/jsx-uses-react": 1,
