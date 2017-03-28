@@ -95,9 +95,11 @@ practicalmeteor:sinon
 
 
 # Custom Packages
-
 meteorhacks:aggregate
 chrismbeckett:toastr
+dispatch:mocha-phantomjs
+practicalmeteor:mocha-console-runner
+lmieulet:meteor-coverage
 flowkey:bootstrap-tour                      # A Meteor.js / Blaze integration for bootstrap-tour
 jquery                                      # Manipulate the DOM using CSS selectors
 

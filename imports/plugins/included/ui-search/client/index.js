@@ -2,6 +2,12 @@
 import "./templates/searchModal/searchModal.html";
 import "./templates/searchModal/searchModal.js";
 import "./templates/searchModal/searchInput.html";
+// sort productSearch template
+import "./templates/searchModal/searchSort.html";
+
+// filter productSearch template
+import "./templates/searchModal/searchFilter.html";
+
 import "./templates/searchModal/searchTypeToggle.html";
 import "./templates/searchModal/searchResults.html";
 

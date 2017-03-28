@@ -162,7 +162,7 @@ function composer(props, onData) {
   if (props.disabled === true || viewAs === "customer") {
     hasPermission = false;
   } else {
-    hasPermission = Reaction.hasPermission(props.premissions);
+    hasPermission = Reaction.hasPermission(props.permissions);
   }
 
   onData(null, {
@@ -171,3 +171,4 @@ function composer(props, onData) {
 }
 
 export default composeWithTracker(composer)(EditContainer);
+
