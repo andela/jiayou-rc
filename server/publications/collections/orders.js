@@ -13,7 +13,7 @@ Meteor.publish("Orders", function () {
   if (!shopId) {
     return this.ready();
   }
-  if (Roles.userIsInRole(this.userId, ["admin", "owner"], shopId)) {
+  if (Roles.userIsInRole(this.userId, ["admin", "owner", "vendor"], shopId)) {
     return Orders.find({
       shopId: shopId
     });

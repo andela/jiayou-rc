@@ -10,7 +10,7 @@
           checked={{checked}}
         >
       </label>
-
+      {{#if isVendorProduct }}
       {{#if product.isDeleted}}
         <div>
         <span class="badge badge-danger" data-i18n="app.deleted">
@@ -26,7 +26,7 @@
       <div>
         {{> React EditButton}}
       </div>
-
+{{/if}}
     </div>
   {{/if}}
 </template>

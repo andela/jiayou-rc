@@ -1,7 +1,6 @@
 import { Reaction } from "/client/api";
 import { ReactionProduct } from "/lib/api";
-import { EditButton, VisibilityButton } from "/imports/plugins/core/ui/client/components";
-import { Meteor } from "meteor/meteor";
+import { EditButton } from "/imports/plugins/core/ui/client/components";
 import { Session } from "meteor/session";
 import { Template } from "meteor/templating";
 
@@ -58,24 +57,11 @@ Template.variant.helpers({
   },
   EditButton() {
     const data = Template.currentData();
-
     return {
       component: EditButton,
       toggleOn: variantIsInActionView(data._id),
       onClick() {
         showVariant(data);
-      }
-    };
-  },
-  VariantRevisionButton() {
-    const variant = Template.currentData();
-
-    return {
-      component: VisibilityButton,
-      toggleOn: variant.isVisible,
-      onClick(event) {
-        event.stopPropagation();
-        ReactionProduct.toggleVisibility(variant);
       }
     };
   }
@@ -87,12 +73,11 @@ Template.variant.helpers({
 
 function showVariant(variant) {
   const selectedProduct = ReactionProduct.selectedProduct();
-
   ReactionProduct.setCurrentVariant(variant._id);
   Session.set("variant-form-" + variant._id, true);
   Reaction.Router.go("product", {handle: selectedProduct.handle, variantId: variant._id});
 
-  if (Reaction.hasPermission("createProduct")) {
+  if (Reaction.hasPermission("createProduct") && (isProductVendor() || isAdmin())) {
     Reaction.showActionView({
       label: "Edit Variant",
       i18nKeyLabel: "productDetailEdit.editVariant",
@@ -102,6 +87,17 @@ function showVariant(variant) {
   }
 }
 
+function isProductVendor() {
+  let isVendor = false;
+  const product = ReactionProduct.selectedProduct() || {};
+  if (Meteor.userId() === product.reactionVendorId) isVendor = true;
+  return isVendor;
+}
+
+function isAdmin() {
+  return Reaction.hasOwnerAccess() || Reaction.hasAdminAccess();
+}
+
 Template.variant.events({
   "click .variant-edit": function () {
     showVariant(this);
@@ -109,9 +105,15 @@ Template.variant.events({
   "dblclick .variant-detail": function () {
     showVariant(this);
   },
-  "click .variant-detail": function () {
+  "click .variant-detail > *": function (event) {
+    event.preventDefault();
+    event.stopPropagation();
     Alerts.removeSeen();
 
     ReactionProduct.setCurrentVariant(this._id);
+
+    if (Reaction.getActionView()) {
+      showVariant(this);
+    }
   }
 });

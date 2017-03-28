@@ -377,6 +377,7 @@ Meteor.methods({
           quantity: quantity,
           variants: variant,
           title: product.title,
+          reactionVendorId: product.reactionVendorId,
           type: product.type
         }
       }

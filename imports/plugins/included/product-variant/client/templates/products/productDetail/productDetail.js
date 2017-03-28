@@ -8,9 +8,8 @@ import { Meteor } from "meteor/meteor";
 import { Session } from "meteor/session";
 import { Template } from "meteor/templating";
 import { EditButton } from "/imports/plugins/core/ui/client/components";
-import { PublishContainer } from "/imports/plugins/core/revisions";
-import { ProductDetailContainer } from "/imports/plugins/included/product-detail-simple/client/containers";
-import { isRevisionControlEnabled } from "/imports/plugins/core/revisions/lib/api";
+
+import * as Collections from "/lib/collections";
 
 Template.productDetail.onCreated(function () {
   this.state = new ReactiveDict();
@@ -33,7 +32,8 @@ Template.productDetail.onCreated(function () {
       const product = ReactionProduct.setProduct(this.productId(), this.variantId());
       this.state.set("product", product);
 
-      if (Reaction.hasPermission("createProduct")) {
+      const auth = isProductVendor();
+      if (Reaction.hasPermission("createProduct") && (auth[0] || auth[1])) {
         if (!Reaction.getActionView() && Reaction.isActionViewOpen() === true) {
           Reaction.setActionView({
             template: "productDetailForm",
@@ -56,24 +56,21 @@ Template.productDetail.onCreated(function () {
   });
 });
 
+
 /**
  * productDetail helpers
  * see helper/product.js for
  * product data source
  */
 Template.productDetail.helpers({
-  PDC() {
-    return {
-      component: ProductDetailContainer
-    };
-  },
+
   tagListProps() {
     const instance = Template.instance();
     const product = instance.state.get("product") || {};
     const tags = instance.state.get("tags");
     const productId = product._id;
-    const canEdit = Reaction.hasPermission("createProduct");
-
+    const auth = isProductVendor();
+    const canEdit = Reaction.hasPermission("createProduct") && (auth[0] || auth[1]);
     return {
       tags,
       isEditing: canEdit,
@@ -107,7 +104,7 @@ Template.productDetail.helpers({
         Meteor.call("products/updateProductTags", productId, tagName, null,
           function (error) {
             if (error) {
-              Alerts.toast(i18next.t("productDetail.tagExists"), "error");
+              Alerts.toast("Tag already exists, duplicate add failed.", "error");
             }
           });
       },
@@ -115,7 +112,7 @@ Template.productDetail.helpers({
         Meteor.call("products/removeProductTag", productId, tag._id,
           function (error) {
             if (error) {
-              Alerts.toast(i18next.t("productDetail.tagExists"), "error");
+              Alerts.toast("Tag already exists, duplicate add failed.", "error");
             }
           });
       },
@@ -126,7 +123,7 @@ Template.productDetail.helpers({
         Meteor.call("products/updateProductTags", productId, tagName, tagId,
           function (error) {
             if (error) {
-              Alerts.toast(i18next.t("productDetail.tagExists"), "error");
+              Alerts.toast("Tag already exists, duplicate add failed.", "error");
             }
           });
       }
@@ -151,8 +148,8 @@ Template.productDetail.helpers({
   showTagTitle() {
     const instance = Template.instance();
     const product = instance.state.get("product") || {};
-
-    if (Reaction.hasPermission("createProduct")) {
+    const auth = isProductVendor();
+    if (Reaction.hasPermission("createProduct") && (auth[0] || auth[1])) {
       return true;
     }
 
@@ -166,8 +163,8 @@ Template.productDetail.helpers({
   showDetailTitle() {
     const instance = Template.instance();
     const product = instance.state.get("product") || {};
-
-    if (Reaction.hasPermission("createProduct")) {
+    const auth = isProductVendor();
+    if (Reaction.hasPermission("createProduct") && (auth[0] || auth[1])) {
       return true;
     }
 
@@ -199,7 +196,8 @@ Template.productDetail.helpers({
     return null;
   },
   tagsComponent: function () {
-    if (Reaction.hasPermission("createProduct")) {
+    const auth = isProductVendor();
+    if (Reaction.hasPermission("createProduct") && (auth[0] || auth[1])) {
       return Template.productTagInputForm;
     }
     return Template.productDetailTags;
@@ -219,18 +217,34 @@ Template.productDetail.helpers({
     return null;
   },
   fieldComponent: function () {
-    if (Reaction.hasPermission("createProduct")) {
+    const auth = isProductVendor();
+    if (Reaction.hasPermission("createProduct") && (auth[0] || auth[1])) {
       return Template.productDetailEdit;
     }
     return Template.productDetailField;
   },
   metaComponent: function () {
-    if (Reaction.hasPermission("createProduct")) {
+    const auth = isProductVendor();
+    if (Reaction.hasPermission("createProduct") && (auth[0] || auth[1])) {
       return Template.productMetaFieldForm;
     }
     return Template.productMetaField;
   }
 });
+
+function isProductVendor() {
+  let isVendor = false;
+  const isAdmin = Reaction.hasOwnerAccess() || Reaction.hasAdminAccess();
+  const instance = Template.instance();
+  const product = instance.state.get("product") || {};
+  const productId = product._id;
+  const productAvailable = Collections.Products.findOne({
+    _id: productId,
+    reactionVendorId: Meteor.userId()
+  });
+  if (productAvailable) isVendor = true;
+  return [isAdmin, isVendor];
+}
 
 /**
  * productDetail events
@@ -239,7 +253,8 @@ Template.productDetail.helpers({
 Template.productDetail.events({
   "click #price": function () {
     let formName;
-    if (Reaction.hasPermission("createProduct")) {
+    const auth = isProductVendor();
+    if (Reaction.hasPermission("createProduct") && (auth[0] || auth[1])) {
       const variant = ReactionProduct.selectedVariant();
       if (!variant) {
         return;
@@ -436,9 +451,6 @@ Template.productDetail.events({
 
 Template.productDetailForm.onCreated(function () {
   this.state = new ReactiveDict();
-  this.state.setDefault({
-    product: {}
-  });
 
   this.autorun(() => {
     this.state.set({
@@ -454,15 +466,6 @@ Template.productDetailForm.onCreated(function () {
 });
 
 Template.productDetailForm.helpers({
-  PublishContainerComponent() {
-    const instance = Template.instance();
-    const product = instance.state.get("product") || {};
-
-    return {
-      component: PublishContainer,
-      documentIds: [product._id]
-    };
-  },
   product() {
     return Template.instance().state.get("product");
   },
@@ -575,50 +578,45 @@ Template.productDetailDashboardControls.helpers({
  */
 Template.productDetailDashboardControls.events({
   "click [data-event-action=publishProduct]": function (event, template) {
+    let errorMsg = "";
     const instance = Template.instance();
     const self = instance.state.get("product") || {};
-
-    if (isRevisionControlEnabled()) {
-      Meteor.call("products/updateProductField", self._id, "isVisible", !self.isVisible);
-    } else {
-      let errorMsg = "";
-      if (!self.title) {
-        errorMsg += `${i18next.t("error.isRequired", { field: i18next.t("productDetailEdit.title") })} `;
-        template.$(".title-edit-input").focus();
+    if (!self.title) {
+      errorMsg += `${i18next.t("error.isRequired", { field: i18next.t("productDetailEdit.title") })} `;
+      template.$(".title-edit-input").focus();
+    }
+    const variants = ReactionProduct.getVariants(self._id);
+    variants.forEach((variant, index) => {
+      if (!variant.title) {
+        errorMsg +=
+          `${i18next.t("error.variantFieldIsRequired", { field: i18next.t("productVariant.title"), number: index + 1 })} `;
       }
-      const variants = ReactionProduct.getVariants(self._id);
-      variants.forEach((variant, index) => {
-        if (!variant.title) {
+      // if top variant has children, it is not necessary to check its price
+      if (variant.ancestors.length === 1 && !ReactionProduct.checkChildVariants(variant._id) ||
+        variant.ancestors.length !== 1) {
+        if (!variant.price) {
           errorMsg +=
-            `${i18next.t("error.variantFieldIsRequired", { field: i18next.t("productVariant.title"), number: index + 1 })} `;
+            `${i18next.t("error.variantFieldIsRequired", { field: i18next.t("productVariant.price"), number: index + 1 })} `;
         }
-        // if top variant has children, it is not necessary to check its price
-        if (variant.ancestors.length === 1 && !ReactionProduct.checkChildVariants(variant._id) ||
-          variant.ancestors.length !== 1) {
-          if (!variant.price) {
-            errorMsg +=
-              `${i18next.t("error.variantFieldIsRequired", { field: i18next.t("productVariant.price"), number: index + 1 })} `;
-          }
-        }
-      });
-      if (errorMsg.length > 0) {
-        Alerts.inline(errorMsg, "warning", {
-          placement: "productManagement",
-          i18nKey: "productDetail.errorMsg"
-        });
-      } else {
-        Meteor.call("products/publishProduct", self._id, function (error) {
-          if (error) {
-            return Alerts.inline(error.reason, "error", {
-              placement: "productManagement",
-              id: self._id,
-              i18nKey: "productDetail.errorMsg"
-            });
-          }
-
-          return true;
-        });
       }
+    });
+    if (errorMsg.length > 0) {
+      Alerts.inline(errorMsg, "warning", {
+        placement: "productManagement",
+        i18nKey: "productDetail.errorMsg"
+      });
+    } else {
+      Meteor.call("products/publishProduct", self._id, function (error) {
+        if (error) {
+          return Alerts.inline(error.reason, "error", {
+            placement: "productManagement",
+            id: self._id,
+            i18nKey: "productDetail.errorMsg"
+          });
+        }
+
+        return true;
+      });
     }
   }
 });

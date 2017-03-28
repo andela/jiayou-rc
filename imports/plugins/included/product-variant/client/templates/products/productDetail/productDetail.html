@@ -1,5 +1,6 @@
 <template name="productDetail">
   {{#with product}}
+
   <div class="container-main">
     <div class="container-fluid pdp-container">
       {{!-- Product Visibility Admin Block --}}
@@ -37,6 +38,9 @@
               <h3 data-i18n="productDetail.details">Details</h3>
             {{/if}}
             {{> metaComponent }}
+            <div>
+            {{> showTweets }}
+            </div>
           </div>
           <!-- END Left Side -->
           <!-- BEGIN Right Side -->
@@ -52,7 +56,14 @@
                 {{!-- Social Commentary --}}
                 {{> productSocial }}
                 {{#if hasPermission "createProduct"}}
+                  {{#if isProductVendor}}
                   <div>{{> React SocialEditButton}}</div>
+                  {{/if}}
+                {{/if}}
+                {{#if hasPermission "createProduct"}}
+                  {{#if isAdmin}}
+                  <div>{{> React SocialEditButton}}</div>
+                  {{/if}}
                 {{/if}}
               </div>
             </div>
@@ -60,6 +71,10 @@
             <div class="vendor">
               {{>fieldComponent field="vendor" value=vendor}}
             </div>
+
+            <a href="/reaction/vendors/{{reactionVendor}}"><div class="vendor">
+              {{>fieldComponent field="reactionVendor" value=reactionVendor}}
+            </div></a>
 
             <!-- main product information -->
             <div class="pdp product-info">
@@ -90,7 +105,11 @@
                   </button>
                 </div>
               </div>
-
+              <!--Social media-->
+              <div class="user-review">
+              {{>showReviews}}
+              {{>productReview}}
+              </div>
             </div>
             <!-- END Right Side -->
           </div>
@@ -138,13 +157,6 @@
             data-event-action="deleteProduct"
           }}
         {{/if}}
-      </div>
-    </div>
-  </div>
-  <div id="product-edit-form-{{product._id}}" class="panel-group variant-edit-form">
-    <div class="panel panel-default variant-form">
-      <div class="panel-body">
-          {{> React PublishContainerComponent}}
       </div>
     </div>
   </div>
