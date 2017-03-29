@@ -249,8 +249,9 @@ function composer(props, onData) {
 
   let isEditable = props.editable;
 
+
   if (typeof isEditable !== "boolean") {
-    isEditable = Reaction.hasPermission(props.premissions);
+    isEditable = Reaction.hasPermission(props.permissions);
   }
 
   const tagsByKey = {};
@@ -266,7 +267,7 @@ function composer(props, onData) {
     tagIds: getTagIds({ tags }),
     tagsByKey,
     tagsAsArray: tags,
-    editable: isEditable
+    editable: true
   });
 }
 
