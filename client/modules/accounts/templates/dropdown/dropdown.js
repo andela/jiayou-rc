@@ -1,3 +1,5 @@
+/* eslint no-undef: 0 */
+
 import { Reaction, Logger } from "/client/api";
 import { Tags } from "/lib/collections";
 import { Session } from "meteor/session";
@@ -67,5 +69,18 @@ Template.loginDropdown.events({
       Reaction.Router.go(route);
     }
     template.$(".dropdown-toggle").dropdown("toggle");
+  }
+});
+
+Template.walletButton.events({
+  /**
+ * wallet
+ * @param {Event} event - jQuery Event
+ * @param {Template} template - Blaze Template
+ * @return {void}
+ */
+  "click #wallet": (event) => {
+    event.preventDefault();
+    FlowRouter.go("/wallet");
   }
 });
